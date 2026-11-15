@@ -31,9 +31,9 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           node -e '
-            const fs = require("fs");
-            const { stitch } = require("@google/stitch-sdk");
-            async function run() {
+              const fs = require("fs");
+              async function run() {
+              const { stitch } = await import("@google/stitch-sdk");
               const project = await stitch.createProject({ title: "MateflowLab-Issue-" + process.env.ISSUE_NUMBER });
               const generation = await project.generate(process.env.PROMPT.replace("@stitch", "").trim());
               const html = await generation.first.getHtml();
