@@ -26,7 +26,7 @@ jobs:
 
       - name: Generate HTML Page from Google Stitch
         env:
-          STITCH_API_KEY: ${{ secrets.STITCH_AI_KEY }}
+          STITCH_API_KEY: ${{ secrets.STITCH_API_KEY }}
           PROMPT: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
