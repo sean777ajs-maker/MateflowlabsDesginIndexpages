@@ -1,0 +1,47 @@
+name: Stitch Design & Issue Agent
+
+on:
+issues:
+types: [opened]
+issue_comment:
+types: [created]
+permissions:
+contents: write
+issues: write
+jobs:
+run-stitch-agent:
+runs-on: ubuntu-latest
+if: github.event.comment.user.type != 'Bot'
+steps:
+- name: Checkout Repository
+uses: actions/checkout@v4
+name: Setup Node.js
+uses: actions/setup-node@v4
+with:
+node-version: '20'
+name: Install Google Stitch SDK & Skills
+run: |
+npm install @google/stitch-sdk
+npx skills add google-labs-code/stitch-skills --global
+- name: Connect Stitch & Process Issue
+env:
+STITCH_API_KEY: ${{ secrets.STITCH_AI_KEY }}
+GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ISSUE_TITLE: ${{ github.event.issue.title }}
+ISSUE_BODY: ${{ github.event.issue.body }}
+ISSUE_NUMBER: ${{ github.event.issue.number }}
+REPO: ${{ github.repository }}
+run: |
+node -e '
+const { stitch } = require("@google/stitch-sdk");
+async function run() {
+const projects = await stitch.projects();
+console.log("Connected to Stitch. Active projects:", projects.length);
+}
+run().catch(err => { console.error(err); process.exit(1); });
+'
+curl -s -X POST "github.com" 
+-H "Authorization: Bearer $GITHUB_TOKEN" 
+-H "Accept: application/vnd.github+json" 
+-d '{"body": "Stitch AI Agent authenticated with STITCH_AI_KEY and verified your Stitch workspace."}'
+	3
