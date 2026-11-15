@@ -1,47 +1,45 @@
-name: Stitch Design & Issue Agent
-
+name: Google Stitch Page Builder
 on:
-issues:
-types: [opened]
 issue_comment:
 types: [created]
 permissions:
 contents: write
 issues: write
 jobs:
-run-stitch-agent:
+generate-stitch-page:
+if: contains(github.event.comment.body, '@stitch')
 runs-on: ubuntu-latest
-if: github.event.comment.user.type != 'Bot'
 steps:
 - name: Checkout Repository
 uses: actions/checkout@v4
-name: Setup Node.js
+- name: Setup Node.js
 uses: actions/setup-node@v4
 with:
 node-version: '20'
-name: Install Google Stitch SDK & Skills
-run: |
-npm install @google/stitch-sdk
-npx skills add google-labs-code/stitch-skills --global
-- name: Connect Stitch & Process Issue
+- name: Install Google Stitch SDK
+run: npm install @google/stitch-sdk
+- name: Generate HTML Page from Google Stitch
 env:
 STITCH_API_KEY: ${{ secrets.STITCH_AI_KEY }}
-GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-ISSUE_TITLE: ${{ github.event.issue.title }}
-ISSUE_BODY: ${{ github.event.issue.body }}
+PROMPT: ${{ github.event.comment.body }}
 ISSUE_NUMBER: ${{ github.event.issue.number }}
-REPO: ${{ github.repository }}
 run: |
 node -e '
+const fs = require("fs");
 const { stitch } = require("@google/stitch-sdk");
 async function run() {
-const projects = await stitch.projects();
-console.log("Connected to Stitch. Active projects:", projects.length);
+const project = await stitch.createProject({ title: "MateflowLab-Issue-" + process.env.ISSUE_NUMBER });
+const generation = await project.generate(process.env.PROMPT.replace("@stitch", "").trim());
+const html = await generation.first.getHtml();
+fs.writeFileSync("stitch-generated-" + Date.now() + ".html", html);
+console.log("Saved HTML page from Google Stitch.");
 }
 run().catch(err => { console.error(err); process.exit(1); });
 '
-curl -s -X POST "github.com" 
--H "Authorization: Bearer $GITHUB_TOKEN" 
--H "Accept: application/vnd.github+json" 
--d '{"body": "Stitch AI Agent authenticated with STITCH_AI_KEY and verified your Stitch workspace."}'
-	3
+- name: Save Generated HTML to Repository
+run: |
+git config user.name "Google Stitch Bot"
+git config user.email "bot@mateflowlab.com"
+git add .
+git commit -m "Add generated HTML page from Google Stitch"
+git push
