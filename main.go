@@ -190,11 +190,72 @@ func stringField(m map[string]any, key string) string {
 	return ""
 }
 
+func findScreen(data map[string]any) map[string]any {
+	if data == nil {
+		return nil
+	}
+	if components, ok := data["outputComponents"].([]any); ok {
+		for _, c := range components {
+			cMap, ok := c.(map[string]any)
+			if !ok {
+				continue
+			}
+			if design, ok := cMap["design"].(map[string]any); ok {
+				if screens, ok := design["screens"].([]any); ok {
+					for _, item := range screens {
+						if sMap, ok := item.(map[string]any); ok {
+							return sMap
+						}
+					}
+				}
+			}
+			if sMap, ok := cMap["screen"].(map[string]any); ok {
+				return sMap
+			}
+		}
+	}
+	if screens, ok := data["screens"].([]any); ok {
+		for _, item := range screens {
+			if sMap, ok := item.(map[string]any); ok {
+				return sMap
+			}
+		}
+	}
+	if screensMap, ok := data["screens"].(map[string]any); ok {
+		for _, item := range screensMap {
+			if sMap, ok := item.(map[string]any); ok {
+				return sMap
+			}
+		}
+	}
+	if sMap, ok := data["screen"].(map[string]any); ok {
+		return sMap
+	}
+	return nil
+}
+
 func extractDownloadURL(screen map[string]any) string {
 	if htmlCode, ok := screen["htmlCode"].(map[string]any); ok {
-		return stringField(htmlCode, "downloadUrl")
+		if u := stringField(htmlCode, "downloadUrl"); u != "" {
+			return u
+		}
 	}
-	return ""
+	return stringField(screen, "downloadUrl")
+}
+
+func extractInlineHTML(screen map[string]any) string {
+	if htmlCode, ok := screen["htmlCode"].(map[string]any); ok {
+		if content := stringField(htmlCode, "content"); content != "" {
+			return content
+		}
+		if code := stringField(htmlCode, "html"); code != "" {
+			return code
+		}
+	}
+	if code := stringField(screen, "html"); code != "" {
+		return code
+	}
+	return stringField(screen, "code")
 }
 
 func fetchPage(client *http.Client, url, apiKey string, timeout time.Duration) (int, []byte) {
@@ -265,87 +326,93 @@ func main() {
 	fmt.Printf("project: %s\n", projectID)
 
 	gen := mcp.callTool("generate_screen_from_text", map[string]any{
-		"projectId": projectID,
-		"prompt":    prompt,
+		"projectId":  projectID,
+		"prompt":     prompt,
+		"deviceType": "DESKTOP",
 	}, 900*time.Second)
 
-	var screen map[string]any
-	if components, ok := gen["outputComponents"].([]any); ok {
-		for _, c := range components {
-			cMap, ok := c.(map[string]any)
-			if !ok {
-				continue
-			}
-			design, ok := cMap["design"].(map[string]any)
-			if !ok {
-				continue
-			}
-			screens, ok := design["screens"].([]any)
-			if !ok {
-				continue
-			}
-			for _, item := range screens {
-				if sMap, ok := item.(map[string]any); ok {
-					screen = sMap
-					break
-				}
-			}
-			if screen != nil {
-				break
-			}
-		}
+	screen := findScreen(gen)
+	if screen == nil {
+		listed := mcp.callTool("list_screens", map[string]any{
+			"projectId": projectID,
+		}, 60*time.Second)
+		screen = findScreen(listed)
 	}
 	if screen == nil {
-		fail("generate_screen_from_text: no screen in response")
-	}
-
-	downloadURL := extractDownloadURL(screen)
-	if downloadURL == "" {
-		name := stringField(screen, "name")
-		parts := strings.Split(strings.Trim(name, "/"), "/")
-		if len(parts) != 4 {
-			fail("generate response has no download URL and no screen name to look up")
-		}
-		detail := mcp.callTool("get_screen", map[string]any{
-			"name":      name,
-			"projectId": parts,
-			"screenId":  parts,
+		projDetail := mcp.callTool("get_project", map[string]any{
+			"name":      "projects/" + projectID,
+			"projectId": projectID,
 		}, 60*time.Second)
-		downloadURL = extractDownloadURL(detail)
+		screen = findScreen(projDetail)
 	}
-	if downloadURL == "" {
-		fail("no HTML download URL for the generated screen")
+	if screen == nil {
+		rawGen, _ := json.Marshal(gen)
+		fail("generate_screen_from_text: no screen in response: %s", string(rawGen))
 	}
 
-	status, html := fetchPage(mcp.client, downloadURL, key, 120*time.Second)
-	if status >= 400 {
-		status, html = fetchPage(mcp.client, downloadURL, "", 120*time.Second)
+	var html []byte
+	if inline := extractInlineHTML(screen); inline != "" {
+		html = []byte(inline)
 	}
-	if status >= 400 {
-		snippet := html
-		if len(snippet) > 500 {
-			snippet = snippet[:500]
+
+	if len(html) == 0 {
+		downloadURL := extractDownloadURL(screen)
+		if downloadURL == "" {
+			name := stringField(screen, "name")
+			scrID := stringField(screen, "screenId")
+			if scrID == "" && name != "" {
+				parts := strings.Split(strings.Trim(name, "/"), "/")
+				scrID = parts[len(parts)-1]
+			}
+			if name == "" && scrID != "" {
+				name = fmt.Sprintf("projects/%s/screens/%s", projectID, scrID)
+			}
+			detail := mcp.callTool("get_screen", map[string]any{
+				"name":      name,
+				"projectId": projectID,
+				"screenId":  scrID,
+			}, 60*time.Second)
+			if inline := extractInlineHTML(detail); inline != "" {
+				html = []byte(inline)
+			} else {
+				downloadURL = extractDownloadURL(detail)
+			}
 		}
-		fail("download: HTTP %d: %q", status, string(snippet))
-	}
 
-	var errPayload struct {
-		Error *struct {
-			Message string `json:"message"`
-		} `json:"error"`
-	}
-	if json.Unmarshal(html, &errPayload) == nil && errPayload.Error != nil {
-		fail("download: server returned an error, not a page: %s", errPayload.Error.Message)
-	}
-
-	trimmed := bytes.TrimSpace(html)
-	if !bytes.HasPrefix(trimmed, []byte("<")) {
-		fail("download: response does not look like HTML")
-	}
-
-	outFile := fmt.Sprintf("stitch-generated-%s.html", issue)
-	if err := os.WriteFile(outFile, html, 0644); err != nil {
-		fail("write output file %s: %v", outFile, err)
-	}
-	fmt.Printf("saved %s (%d bytes)\n", outFile, len(html))
+		if len(html) == 0 {
+			if downloadURL == "" {
+				fail("no HTML download URL for the generated screen")
+			}
+			status, fetched := fetchPage(mcp.client, downloadURL, key, 120*time.Second)
+			if status >= 400 {
+				status, fetched = fetchPage(mcp.client, downloadURL, "", 120*time.Second)
+			}
+			if status >= 400 {
+				snippet := fetched
+				if len(snippet) > 500 {
+					snippet = snippet[:500]
+				}
+Use code with caution.
+fail("download: HTTP %d: %q", status, string(snippet))
+}
+html = fetched
+}
+}
+var errPayload struct {
+Error *struct {
+Message string json:"message"
+} json:"error"
+}
+if json.Unmarshal(html, &errPayload) == nil && errPayload.Error != nil {
+fail("download: server returned an error, not a page: %s", errPayload.Error.Message)
+}
+trimmed := bytes.TrimSpace(html)
+if !bytes.HasPrefix(trimmed, []byte("<")) {
+fail("download: response does not look like HTML")
+}
+outFile := fmt.Sprintf("stitch-generated-%s.html", issue)
+if err := os.WriteFile(outFile, html, 0644); err != nil {
+fail("write output file %s: %v", outFile, err)
+}
+fmt.Printf("saved %s (%d bytes)\n", outFile, len(html))
 }
