@@ -220,10 +220,8 @@ func fetchPage(client *http.Client, url, apiKey string, timeout time.Duration) (
 }
 
 func main() {
-	mcpURL := strings.TrimSpace(os.Getenv("STITCH_MCP_URL"))
-	if mcpURL == "" {
-		mcpURL = "https://googleapis.com"
-	}
+	mcpURL := "https://stitch.googleapis.com/mcp"
+
 	key := strings.TrimSpace(os.Getenv("STITCH_AI_KEY"))
 	if key == "" {
 		fail("STITCH_AI_KEY is not set")
@@ -308,19 +306,10 @@ func main() {
 		if len(parts) != 4 {
 			fail("generate response has no download URL and no screen name to look up")
 		}
-		var projID, scrID string
-		for idx, val := range parts {
-			if idx == 1 {
-				projID = val
-			}
-			if idx == 3 {
-				scrID = val
-			}
-		}
 		detail := mcp.callTool("get_screen", map[string]any{
 			"name":      name,
-			"projectId": projID,
-			"screenId":  scrID,
+			"projectId": parts,
+			"screenId":  parts,
 		}, 60*time.Second)
 		downloadURL = extractDownloadURL(detail)
 	}
