@@ -1,3 +1,4 @@
+cat << 'EOF' > main.go
 package main
 import (
 "bytes"
@@ -326,27 +327,21 @@ fail("download: server returned an error, not a page: %s", errPayload.Error.Mess
 }
 trimmed := bytes.TrimSpace(html)
 if !bytes.HasPrefix(trimmed, []byte("<")) {
-snippet := html
-if len(snippet) > 100 {
-snippet = snippet[:100]
+fail("download: response does not look like HTML")
 }
-fail("downloaded content is not HTML (first bytes: %q)", string(snippet))
+outFile := fmt.Sprintf("stitch-generated-%s.html", issue)
+if err := os.WriteFile(outFile, html, 0644); err != nil {
+fail("write output file %s: %v", outFile, err)
 }
-filename := fmt.Sprintf("stitch-generated-%d.html", time.Now().UnixMilli())
-if err := os.WriteFile(filename, html, 0644); err != nil {
-fail("write file %s: %v", filename, err)
+fmt.Printf("saved %s (%d bytes)\n", outFile, len(html))
 }
-fmt.Printf("Saved HTML page from Google Stitch: %s (%d bytes)\n", filename, len(html))
-}
-Once main.go is committed in the root directory, comment @stitch on an issue to trigger the workflow, and share the Actions log if anything needs adjustment.
-Your repository root (MateflowlabsDesginIndexpages) is now ready for main.go—click Add file > Create new file right on this screen to add it.
+EOF
 
-Exact Steps From Your Current Screen
+Option B: Fix the 3 stripped characters directly in GitHub's web editor
 
-1. Click the Add file dropdown button (next to the green <> Code button in your screenshot) and select Create new file.
-2. In the Name your file... box at the top, type main.go.
-3. Paste the complete main.go code from the message above into the editor.
-4. Click Commit changes... in the top right.
-Once committed, main.go will appear directly in this file list right under .github/workflows and node_modules.
-After you commit main.go, share a screenshot of this root file list or your Actions run log if you'd like me to verify that the workflow executes cleanly.
-
+If you prefer editing main.go right in your browser:
+1. Wrap every json:"..." on lines 14, 20, 26, 321, and 322 in backticks: `json:"..."`.
+2. Put empty brackets [] before struct on line 28 ([]struct) and before any ([]any).
+3. Put * between 60 and time.Second on lines 133, 308, and 310 (60 * time.Second).
+4. Verify the very last line of the file ends with fmt.Printf("saved %s (%d bytes)\n", outFile, len(html)) followed by } (nothing cut off after if !bytes.HasPrefix(trimmed, []byte("<"))).
+Once gofmt -e main.go shows zero errors (or you commit those 4 fixes), your workflow will compile and run cleanly.
