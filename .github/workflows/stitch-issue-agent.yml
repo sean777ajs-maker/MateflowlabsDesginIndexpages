@@ -32,15 +32,11 @@ jobs:
         run: |
           node -e '
             const fs = require("fs");
+            const { stitch } = require("@google/stitch-sdk");
             async function run() {
-              const { stitch } = await import("@google/stitch-sdk");
-              const project = await stitch.createProject("MateflowLab-Issue-" + process.env.ISSUE_NUMBER);
-              const result = await project.generate(process.env.PROMPT.replace("@stitch", "").trim());
-              const screen = Array.isArray(result) ? result[0] : (result?.first || result?.screens?.[0] || result);
-              const htmlOrUrl = await screen.getHtml();
-              const html = typeof htmlOrUrl === "string" && htmlOrUrl.startsWith("http")
-                ? await (await fetch(htmlOrUrl)).text()
-                : htmlOrUrl;
+              const project = await stitch.createProject({ title: "MateflowLab-Issue-" + process.env.ISSUE_NUMBER });
+              const generation = await project.generate(process.env.PROMPT.replace("@stitch", "").trim());
+              const html = await generation.first.getHtml();
               fs.writeFileSync("stitch-generated-" + Date.now() + ".html", html);
               console.log("Saved HTML page from Google Stitch.");
             }
