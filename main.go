@@ -1,4 +1,3 @@
-cat << 'EOF' > main.go
 package main
 import (
 "bytes"
@@ -335,13 +334,3 @@ fail("write output file %s: %v", outFile, err)
 }
 fmt.Printf("saved %s (%d bytes)\n", outFile, len(html))
 }
-EOF
-
-Option B: Fix the 3 stripped characters directly in GitHub's web editor
-
-If you prefer editing main.go right in your browser:
-1. Wrap every json:"..." on lines 14, 20, 26, 321, and 322 in backticks: `json:"..."`.
-2. Put empty brackets [] before struct on line 28 ([]struct) and before any ([]any).
-3. Put * between 60 and time.Second on lines 133, 308, and 310 (60 * time.Second).
-4. Verify the very last line of the file ends with fmt.Printf("saved %s (%d bytes)\n", outFile, len(html)) followed by } (nothing cut off after if !bytes.HasPrefix(trimmed, []byte("<"))).
-Once gofmt -e main.go shows zero errors (or you commit those 4 fixes), your workflow will compile and run cleanly.
