@@ -126,11 +126,11 @@ fail("%s: no result in response", method)
 }
 return msg.Result
 }
-func (m *mcpClient) notify(method string) {
+func (m mcpClient) notify(method string) {
 m.post(rpcRequest{
 JSONRPC: "2.0",
 Method:  method,
-}, 60 * time.Second)
+}, 60time.Second)
 }
 func (m *mcpClient) callTool(name string, args any, timeout time.Duration) map[string]any {
 raw := m.rpc("tools/call", map[string]any{
@@ -233,11 +233,11 @@ mcp.rpc("initialize", map[string]any{
 "name":    "stitchgen",
 "version": "0.1.0",
 },
-}, 60 * time.Second)
+}, 60*time.Second)
 mcp.notify("notifications/initialized")
 project := mcp.callTool("create_project", map[string]any{
 "title": fmt.Sprintf("MateflowLab-Issue-%s", issue),
-}, 60 * time.Second)
+}, 60*time.Second)
 projectID := strings.TrimPrefix(stringField(project, "name"), "projects/")
 if projectID == "" {
 projectID = stringField(project, "projectId")
@@ -249,7 +249,7 @@ fmt.Printf("project: %s\n", projectID)
 gen := mcp.callTool("generate_screen_from_text", map[string]any{
 "projectId": projectID,
 "prompt":    prompt,
-}, 900 * time.Second)
+}, 900*time.Second)
 var screen map[string]any
 if components, ok := gen["outputComponents"].([]any); ok {
 for _, c := range components {
@@ -299,15 +299,15 @@ detail := mcp.callTool("get_screen", map[string]any{
 "name":      name,
 "projectId": projID,
 "screenId":  scrID,
-}, 60 * time.Second)
+}, 60*time.Second)
 downloadURL = extractDownloadURL(detail)
 }
 if downloadURL == "" {
 fail("no HTML download URL for the generated screen")
 }
-status, html := fetchPage(mcp.client, downloadURL, key, 120 * time.Second)
+status, html := fetchPage(mcp.client, downloadURL, key, 120time.Second)
 if status >= 400 {
-status, html = fetchPage(mcp.client, downloadURL, "", 120 * time.Second)
+status, html = fetchPage(mcp.client, downloadURL, "", 120time.Second)
 }
 if status >= 400 {
 snippet := html
