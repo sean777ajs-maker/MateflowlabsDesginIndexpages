@@ -1,0 +1,82 @@
+name: Mateflow Go Broken Paths & Opus Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+  push:
+    branches: [ main ]
+    paths:
+      - 'cmd/audit/**'
+      - '.github/workflows/mateflow-link-audit.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit-paths:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Initialize Go modules
+        run: |
+          [ -f go.mod ] || go mod init mateflow-audit
+          go mod tidy
+
+      - name: Run Go Chromedp Crawler & Claude Opus Audit
+        env:
+          POE_API_KEY: ${{ secrets.POE_API_KEY }}
+        run: |
+          go run ./cmd/audit
+          cat AUDIT_REPORT.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Raw Telemetry & Report Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mateflow-audit-results
+          path: |
+            audit_telemetry.json
+            AUDIT_REPORT.md
+
+      - name: Post Findings to GitHub Issue
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const fs = require('fs');
+            if (!fs.existsSync('AUDIT_REPORT.md')) return;
+            const body = fs.readFileSync('AUDIT_REPORT.md', 'utf8');
+            const title = 'Mateflow Path & Routing Audit (Claude Opus)';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              creator: 'github-actions[bot]'
+            });
+            const existing = issues.find(i => i.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: `### Automated Go Audit Run (${new Date().toISOString()})\n\n${body}`
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body
+              });
+            }
