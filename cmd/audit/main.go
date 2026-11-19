@@ -8,21 +8,19 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"regexp"
 	"strings"
 	"time"
-
-	"://github.com"
-	"://github.com"
 )
 
 type BrowserCheckResult struct {
 	URL               string   `json:"url"`
-	HTTPStatus        int64    `json:"http_status"`
+	HTTPStatus        int      `json:"http_status"`
 	FinalURL          string   `json:"final_url"`
 	Title             string   `json:"title"`
-	VisibleLines      int      `json:"visible_lines"`
-	VisibleSnippet    string   `json:"visible_snippet"`
+	DOMLength         int      `json:"dom_length"`
+	TextSnippet       string   `json:"text_snippet"`
 	DoubleSchemeLinks []string `json:"double_scheme_links"`
 	Error             string   `json:"error,omitempty"`
 }
@@ -41,60 +39,72 @@ type AuditTelemetry struct {
 	APIDataChecks map[string]APICheckResult       `json:"api_data_checks"`
 }
 
-var doubleSchemeRegex = regexp.MustCompile(`https?://://[^\s"'<>]+`)
+var (
+	doubleSchemeRegex = regexp.MustCompile(`https?://://[^\s"'<>]+`)
+	titleRegex        = regexp.MustCompile(`(?is)<title[^>]*>(.*?)</title>`)
+	tagRegex          = regexp.MustCompile(`(?s)<[^>]*>`)
+)
 
-var auditTargets = map[string][]string{
-	"malformed_and_split_surfaces": {
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-	},
-	"gated_and_gateway_doors": {
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-	},
-	"unknown_and_rate_limited": {
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-	},
-	"dashboard_stubs_and_subpages": {
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.comdashboard.html",
-		"https://mateflowlabs.commanage.html",
-		"https://mateflowlabs.comfeatures.html",
-		"https://mateflowlabs.comlabels.html",
-	},
-	"duplicate_surfaces": {
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-		"https://mateflowlabs.com",
-	},
+func u(host, path string) string {
+	return "https:/" + "/" + host + path
 }
 
-var dataEndpoints = map[string]string{
-	"chat_orders_live": "https://mateflowlabs.com",
-	"hub_orders_json":  "https://mateflowlabs.com",
-	"hub_catalog_json": "https://mateflowlabs.com",
-	"hub_feed_json":    "https://mateflowlabs.com",
+func buildTargets() map[string][]string {
+	return map[string][]string{
+		"malformed_and_split_surfaces": {
+			u("mateflowlabs.com", "/az-hub.html"),
+			u("://mateflowlabs.com", "/az-hub.html"),
+			u("://mateflowlabs.com", "/az-hub.html"),
+			u("://mateflowlabs.com", "/az-hub.html"),
+			u("mateflowlabs.com", "/god-mode-admin/index.html"),
+			u("mateflowlabs.com", "/GodModeAdmin.html"),
+			u("mateflowlabs.com", "/god-mode-admin/GodModeAdmin.html"),
+		},
+		"gated_and_gateway_doors": {
+			u("://mateflowlabs.com", "/"),
+			u("://mateflowlabs.com", "/"),
+			u("://mateflowlabs.com", "/"),
+		},
+		"unknown_and_rate_limited": {
+			u("://mateflowlabs.com", "/ledger/"),
+			u("://mateflowlabs.com", "/bidding/"),
+			u("mateflowlabs.com", "/dropbox-cb/"),
+			u("://mateflowlabs.com", "/dropbox-cb/"),
+		},
+		"dashboard_stubs_and_subpages": {
+			u("://mateflowlabs.com", "/"),
+			u("://mateflowlabs.com", "/"),
+			u("://mateflowlabs.com", "/dashboard.html"),
+			u("://mateflowlabs.com", "/manage.html"),
+			u("://mateflowlabs.com", "/features.html"),
+			u("://mateflowlabs.com", "/labels.html"),
+		},
+		"duplicate_surfaces": {
+			u("://mateflowlabs.com", "/studio/"),
+			u("://mateflowlabs.com", "/ops/"),
+			u("mateflowlabs.com", "/Owner/"),
+			u("mateflowlabs.com", "/Seller/"),
+			u("mateflowlabs.com", "/nexustrust/"),
+			u("mateflowlabs.com", "/enterprise.html"),
+			u("mateflowlabs.com", "/mateflow-enterprise-v4.html"),
+		},
+	}
+}
+
+func buildEndpoints() map[string]string {
+	return map[string]string{
+		"chat_orders_live": u("://mateflowlabs.com", "/api/v1/orders/live"),
+		"hub_orders_json":  u("://mateflowlabs.com", "/orders.json"),
+		"hub_catalog_json": u("://mateflowlabs.com", "/catalog.json"),
+		"hub_feed_json":    u("://mateflowlabs.com", "/feed.json"),
+	}
 }
 
 func fetchWithBackoff(targetURL string) APICheckResult {
 	client := &http.Client{Timeout: 15 * time.Second}
 	for attempt := 0; attempt < 3; attempt++ {
 		req, _ := http.NewRequest("GET", targetURL, nil)
-		req.Header.Set("User-Agent", "Mateflow-Go-Audit/1.0")
+		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36")
 		resp, err := client.Do(req)
 		if err != nil {
 			if attempt == 2 {
@@ -127,57 +137,55 @@ func fetchWithBackoff(targetURL string) APICheckResult {
 	return APICheckResult{URL: targetURL, Status: 429, Error: "Persisted 429 after retries"}
 }
 
-func inspectPage(parentCtx context.Context, targetURL string) BrowserCheckResult {
-	ctx, cancel := context.WithTimeout(parentCtx, 25*time.Second)
+func inspectWithHeadlessChrome(targetURL string) BrowserCheckResult {
+	res := BrowserCheckResult{URL: targetURL}
+
+	client := &http.Client{Timeout: 15 * time.Second}
+	req, _ := http.NewRequest("GET", targetURL, nil)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36")
+	if resp, err := client.Do(req); err == nil {
+		res.HTTPStatus = resp.StatusCode
+		res.FinalURL = resp.Request.URL.String()
+		resp.Body.Close()
+	} else {
+		res.Error = err.Error()
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	tabCtx, tabCancel := chromedp.NewContext(ctx)
-	defer tabCancel()
-
-	var statusCode int64
-	chromedp.ListenTarget(tabCtx, func(ev interface{}) {
-		if respEv, ok := ev.(*network.EventResponseReceived); ok {
-			if respEv.Type == network.ResourceTypeDocument && statusCode == 0 {
-				statusCode = respEv.Response.Status
-			}
-		}
-	})
-
-	var finalURL, title, htmlContent, bodyText string
-	err := chromedp.Run(tabCtx,
-		network.Enable(),
-		chromedp.Navigate(targetURL),
-		chromedp.Sleep(2*time.Second),
-		chromedp.Location(&finalURL),
-		chromedp.Title(&title),
-		chromedp.OuterHTML("html", &htmlContent),
-		chromedp.Text("body", &bodyText),
+	cmd := exec.CommandContext(ctx, "google-chrome",
+		"--headless=new",
+		"--no-sandbox",
+		"--disable-gpu",
+		"--disable-dev-shm-usage",
+		"--virtual-time-budget=4000",
+		"--dump-dom",
+		targetURL,
 	)
-	if err != nil {
-		return BrowserCheckResult{URL: targetURL, HTTPStatus: statusCode, Error: err.Error()}
-	}
-
-	var nonEmpty []string
-	for _, line := range strings.Split(bodyText, "\n") {
-		trimmed := strings.TrimSpace(line)
-		if trimmed != "" {
-			nonEmpty = append(nonEmpty, trimmed)
+	out, err := cmd.Output()
+	if err != nil && len(out) == 0 {
+		if res.Error == "" {
+			res.Error = err.Error()
 		}
-	}
-	snippetCount := len(nonEmpty)
-	if snippetCount > 6 {
-		snippetCount = 6
+		return res
 	}
 
-	return BrowserCheckResult{
-		URL:               targetURL,
-		HTTPStatus:        statusCode,
-		FinalURL:          finalURL,
-		Title:             title,
-		VisibleLines:      len(nonEmpty),
-		VisibleSnippet:    strings.Join(nonEmpty[:snippetCount], " | "),
-		DoubleSchemeLinks: doubleSchemeRegex.FindAllString(htmlContent, -1),
+	dom := string(out)
+	res.DOMLength = len(dom)
+	res.DoubleSchemeLinks = doubleSchemeRegex.FindAllString(dom, -1)
+
+	if m := titleRegex.FindStringSubmatch(dom); len(m) > 1 {
+		res.Title = strings.TrimSpace(m[1])
 	}
+
+	plain := tagRegex.ReplaceAllString(dom, " ")
+	fields := strings.Fields(plain)
+	if len(fields) > 60 {
+		fields = fields[:60]
+	}
+	res.TextSnippet = strings.Join(fields, " ")
+	return res
 }
 
 func analyzeWithClaudeOpus(telemetry AuditTelemetry) (string, error) {
@@ -187,12 +195,12 @@ func analyzeWithClaudeOpus(telemetry AuditTelemetry) (string, error) {
 	}
 
 	rawJSON, _ := json.MarshalIndent(telemetry, "", "  ")
-	prompt := fmt.Sprintf(`Audit the Mateflow Labs infrastructure using this live headless Chromium and API telemetry.
+	prompt := fmt.Sprintf(`Audit the Mateflow Labs infrastructure using this live headless Chrome DOM and HTTP telemetry.
 Address all 8 issues:
-1. Double-scheme malformed links (https://://) in az-hub.html and god-mode-admin paths.
+1. Double-scheme malformed links in az-hub.html and god-mode-admin paths.
 2. az-hub.html 401 vs 200 split across apex, hub, go, and dashboard in a real browser.
 3. ://mateflowlabs.com vs ://mateflowlabs.com sign-in gating and missing OpenClaw gateway UI.
-4. ://mateflowlabs.com and /bidding/ rendered DOM vs empty shell.
+4. ://mateflowlabs.com/ledger/ and /bidding/ rendered DOM vs empty shell.
 5. chat /api/v1/orders/live stub (open_unfulfilled: 0) vs hub orders.json.
 6. ://mateflowlabs.com and ://mateflowlabs.com 2-line stub root vs working subpages.
 7. /dropbox-cb/ rate-limit retry outcomes on apex and chat.
@@ -210,7 +218,8 @@ TELEMETRY:
 		},
 	})
 
-	req, _ := http.NewRequest("POST", "https://poe.com", bytes.NewBuffer(reqBody))
+	poeURL := u("://poe.com", "/v1/chat/completions")
+	req, _ := http.NewRequest("POST", poeURL, bytes.NewBuffer(reqBody))
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -240,29 +249,20 @@ TELEMETRY:
 }
 
 func main() {
-	opts := append(chromedp.DefaultExecAllocatorOptions[:],
-		chromedp.Flag("headless", true),
-		chromedp.Flag("no-sandbox", true),
-		chromedp.Flag("disable-dev-shm-usage", true),
-		chromedp.UserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36"),
-	)
-	allocCtx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
-	defer cancel()
-
 	telemetry := AuditTelemetry{
 		BrowserChecks: make(map[string][]BrowserCheckResult),
 		APIDataChecks: make(map[string]APICheckResult),
 	}
 
-	for group, urls := range auditTargets {
-		for _, u := range urls {
-			telemetry.BrowserChecks[group] = append(telemetry.BrowserChecks[group], inspectPage(allocCtx, u))
+	for group, urls := range buildTargets() {
+		for _, target := range urls {
+			telemetry.BrowserChecks[group] = append(telemetry.BrowserChecks[group], inspectWithHeadlessChrome(target))
 			time.Sleep(1500 * time.Millisecond)
 		}
 	}
 
-	for key, u := range dataEndpoints {
-		telemetry.APIDataChecks[key] = fetchWithBackoff(u)
+	for key, target := range buildEndpoints() {
+		telemetry.APIDataChecks[key] = fetchWithBackoff(target)
 	}
 
 	rawTelemetry, _ := json.MarshalIndent(telemetry, "", "  ")
@@ -276,3 +276,4 @@ func main() {
 	_ = os.WriteFile("AUDIT_REPORT.md", []byte(report), 0644)
 	fmt.Println(report)
 }
+
