@@ -104,7 +104,10 @@ func buildEndpoints() map[string]string {
 func fetchWithBackoff(targetURL string) APICheckResult {
 	client := &http.Client{Timeout: 15 * time.Second}
 	for attempt := 0; attempt < 3; attempt++ {
-		req, _ := http.NewRequest("GET", targetURL, nil)
+		req, err := http.NewRequest("GET", targetURL, nil)
+		if err != nil {
+			return APICheckResult{URL: targetURL, Error: err.Error()}
+		}
 		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36")
 		resp, err := client.Do(req)
 		if err != nil {
@@ -139,17 +142,21 @@ func fetchWithBackoff(targetURL string) APICheckResult {
 }
 
 func inspectWithHeadlessChrome(targetURL string) BrowserCheckResult {
-	res := BrowserCheckResult{URL: targetURL}
+	res := BrowserCheckResult{URL: targetURL, FinalURL: targetURL}
 
 	client := &http.Client{Timeout: 15 * time.Second}
-	req, _ := http.NewRequest("GET", targetURL, nil)
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36")
-	if resp, err := client.Do(req); err == nil {
-		res.HTTPStatus = resp.StatusCode
-		res.FinalURL = resp.Request.URL.String()
-		resp.Body.Close()
-	} else {
-		res.Error = err.Error()
+	req, err := http.NewRequest("GET", targetURL, nil)
+	if err == nil {
+		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36")
+		if resp, doErr := client.Do(req); doErr == nil {
+			res.HTTPStatus = resp.StatusCode
+			if resp.Request != nil && resp.Request.URL != nil {
+				res.FinalURL = resp.Request.URL.String()
+			}
+			resp.Body.Close()
+		} else {
+			res.Error = doErr.Error()
+		}
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
@@ -164,10 +171,10 @@ func inspectWithHeadlessChrome(targetURL string) BrowserCheckResult {
 		"--dump-dom",
 		targetURL,
 	)
-	out, err := cmd.Output()
-	if err != nil && len(out) == 0 {
+	out, cmdErr := cmd.Output()
+	if cmdErr != nil && len(out) == 0 {
 		if res.Error == "" {
-			res.Error = err.Error()
+			res.Error = cmdErr.Error()
 		}
 		return res
 	}
@@ -176,8 +183,11 @@ func inspectWithHeadlessChrome(targetURL string) BrowserCheckResult {
 	res.DOMLength = len(dom)
 	res.DoubleSchemeLinks = doubleSchemeRegex.FindAllString(dom, -1)
 
-	if m := titleRegex.FindStringSubmatch(dom); len(m) > 1 {
-		res.Title = strings.TrimSpace(m[1])
+	matches := titleRegex.FindStringSubmatch(dom)
+	for i, m := range matches {
+		if i == 1 {
+			res.Title = strings.TrimSpace(m)
+		}
 	}
 
 	plain := tagRegex.ReplaceAllString(dom, " ")
@@ -220,7 +230,10 @@ TELEMETRY:
 	})
 
 	poeURL := u("://poe.com", "/v1/chat/completions")
-	req, _ := http.NewRequest("POST", poeURL, bytes.NewBuffer(reqBody))
+	req, err := http.NewRequest("POST", poeURL, bytes.NewBuffer(reqBody))
+	if err != nil {
+		return "", err
+	}
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -243,10 +256,15 @@ TELEMETRY:
 			} `json:"message"`
 		} `json:"choices"`
 	}
-	if err := json.Unmarshal(respBytes, &parsed); err != nil || len(parsed.Choices) == 0 {
+	if err := json.Unmarshal(respBytes, &parsed); err != nil {
 		return "", fmt.Errorf("failed to parse Poe API response: %s", string(respBytes))
 	}
-	return parsed.Choices[0].Message.Content, nil
+	for _, choice := range parsed.Choices {
+		if choice.Message.Content != "" {
+			return choice.Message.Content, nil
+		}
+	}
+	return "", fmt.Errorf("empty choices returned from Poe API: %s", string(respBytes))
 }
 
 func main() {
