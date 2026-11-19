@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"regexp"
@@ -46,7 +47,7 @@ var (
 )
 
 func u(host, path string) string {
-	return "https:/" + "/" + host + path
+	return (&url.URL{Scheme: "https", Host: host, Path: path}).String()
 }
 
 func buildTargets() map[string][]string {
@@ -276,4 +277,3 @@ func main() {
 	_ = os.WriteFile("AUDIT_REPORT.md", []byte(report), 0644)
 	fmt.Println(report)
 }
-
