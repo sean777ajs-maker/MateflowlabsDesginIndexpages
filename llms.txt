@@ -1,0 +1,31 @@
+# Mateflow Labs
+
+> Mateflow Labs is the automation, B2B orchestration, and developer hub of the same ecosystem. Together with Akaline Labs, they are building the infrastructure for the next generation of AI-powered commerce.
+
+## Cogsyn
+
+- Akaline Labs and Mateflow Labs have built the next generation AI LLM — powered by Cogsyn, a new provisionally patented programming language where code expires.
+- Unlike legacy AI architectures that rely on message queues and probabilistic guessing, Cogsyn binds every agent instruction, commerce transaction, and truth verification to a single, time-bound "pulse."
+- Zero Hallucinations: Every LLM answer must be grounded in a verified fact sealed within its active pulse. If no source exists, the system states "I don't know."
+- Zero Replay or Drift: If a pulse expires, the instruction dies with it. Yesterday's answer cannot be replayed as today's truth, and multi-agent workflows move in exact lockstep or not at all.
+- Atomic Commerce Locks: Buyers, AI agents, and storefronts share the same moment. Inventory locks atomically within the pulse, eliminating double-booking and overselling.
+- Proven Under Stress: In internal adversarial testing, the engine passed 13 out of 13 validation tests, rejecting replay attacks every single time.
+- Demonstrations are conducted in a controlled environment in Las Vegas. Investors test the system with their own questions and their own data, and see its results live. The underlying methods, code, and complete knowledge behind the technology will not be shared during demonstration. Further technical disclosure will follow under non-disclosure agreement, in stages, after an investor signals readiness to proceed.
+
+## About
+
+- Akaline Labs (akalinelabs.com) is the core operating system and protocol engine for a new kind of commerce — one where AI agents, sellers, and buyers transact directly, with verified provenance and trust built in.
+- Mateflow Labs is the automation and developer orchestration layer.
+- Vegas Discount Depot (vegasdiscountdepot.com) is the live retail storefront.
+- Together, the three brands form a single ecosystem powered by one engine — built in Las Vegas, by a team working outside the big technology companies.
+
+## Links
+
+- [Mateflow Labs](https://mateflowlabs.com/)
+- [Akaline Labs](https://akalinelabs.com/)
+- [Vegas Discount Depot](https://vegasdiscountdepot.com/)
+
+## Contact
+
+- Media & Investor Inquiries: Joshua Brogna, Akaline Labs LLC / Mateflow Labs, North Las Vegas, NV
+- Joshua@akalinelabs.com | support@akalinelabs.com

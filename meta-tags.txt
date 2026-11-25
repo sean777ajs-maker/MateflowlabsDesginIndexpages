@@ -1,0 +1,15 @@
+<!-- Mateflow Labs — paste inside <head> of https://mateflowlabs.com/ (index.html).
+     Replaces the current head, which has only charset + viewport.
+     NOTE: the current live title is "Alkaline OS — Guided Sign-Up, AI Flowchart, Live Storefront & Beyond-Shopify VC Architecture" — keep it if preferred; the description/canonical/OG below are the missing pieces. -->
+<title>Alkaline OS — Guided Sign-Up, AI Flowchart, Live Storefront &amp; Beyond-Shopify VC Architecture</title>
+<meta name="description" content="Mateflow Labs is the automation, B2B orchestration, and developer hub of the Alkaline OS ecosystem — AI agents, sellers, and buyers transacting directly, with verified provenance. Home of the next-generation AI LLM powered by Cogsyn." />
+<link rel="canonical" href="https://mateflowlabs.com/" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Alkaline OS — Guided Sign-Up, AI Flowchart, Live Storefront &amp; Beyond-Shopify VC Architecture" />
+<meta property="og:description" content="Mateflow Labs is the automation, B2B orchestration, and developer hub of the Alkaline OS ecosystem — AI agents, sellers, and buyers transacting directly, with verified provenance. Home of the next-generation AI LLM powered by Cogsyn." />
+<meta property="og:url" content="https://mateflowlabs.com/" />
+<meta property="og:site_name" content="Mateflow Labs" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Alkaline OS — Guided Sign-Up, AI Flowchart, Live Storefront &amp; Beyond-Shopify VC Architecture" />
+<meta name="twitter:description" content="Mateflow Labs is the automation, B2B orchestration, and developer hub of the Alkaline OS ecosystem — AI agents, sellers, and buyers transacting directly, with verified provenance. Home of the next-generation AI LLM powered by Cogsyn." />

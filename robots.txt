@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /api/
+Disallow: /ebay-workspace-api/
+
+Sitemap: https://mateflowlabs.com/sitemap.xml
