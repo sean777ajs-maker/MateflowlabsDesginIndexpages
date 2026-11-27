@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Interactive Vegas Discount Depot storefront demo — Akaline OS store sandbox with 12 featured items and customer checkout.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Akaline OS — Storefront Demo | Mateflowlabs">
+<meta property="og:description" content="Interactive Vegas Discount Depot storefront demo — Akaline OS store sandbox with 12 featured items and customer checkout.">
+<meta property="og:url" content="https://mateflowlabs.com/demo.html">
+<meta property="og:site_name" content="Mateflowlabs">
+  <title>Akaline OS — Storefront Demo | Mateflowlabs</title>
+  <link rel="stylesheet" href="/static/tailwind.min.css">
+  <script src="vdd_catalog.js"></script>
+  <style>
+    body { background:#070a12; color:#f8fafc; font-family:Inter,-apple-system,sans-serif; margin:0; }
+    .flow-node { transition:all 0.2s ease; }
+    .flow-node.active { border-color:#10b981 !important; background:rgba(16,185,129,0.18) !important; box-shadow:0 0 18px rgba(16,185,129,0.3); }
+    .flow-node.done { border-color:#6366f1 !important; background:rgba(99,102,241,0.16) !important; }
+  </style>
+</head>
+<link rel="canonical" href="https://mateflowlabs.com/demo.html">
+<body class="min-h-screen flex flex-col">
+  <header class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800 px-4 py-2.5">
+    <div class="max-w-[1650px] mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-emerald-500 font-black text-xs text-white">AKALINE OS</span>
+        <span class="text-xs font-bold text-slate-300 hidden sm:inline">Storefront Demo • Vegas Discount Depot</span>
+      </div>
+      <div class="flex gap-2 text-xs">
+        <a href="/" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 font-bold">← Back to Akaline OS</a>
+        <a href="/investors.html" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 font-bold">Investors</a>
+      </div>
+    </div>
+  </header>
+  <section id="view-wizard" class="flex-1 max-w-[1650px] w-full mx-auto px-4 py-4 space-y-4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <!-- Right 7 Cols: Live Standalone Website (Never Disappears!) -->
+      <div class="lg:col-span-7 rounded-2xl border-2 border-emerald-500 overflow-hidden shadow-2xl">
+        <div class="bg-slate-950 px-4 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-slate-800">
+          <span id="pvUrl" class="font-mono text-xs text-emerald-400">https://vegasdiscountdepot.com (Live Standalone Storefront)</span>
+          <div class="flex gap-2">
+            <button onclick="switchView('checkout')" class="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs">💳 Test Customer Checkout</button>
+            <button onclick="downloadStandaloneFile()" class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-bold text-xs">💾 Save HTML to Desktop</button>
+          </div>
+        </div>
+
+        <div id="pvViewport" style="background:#f5f3ee;color:#171815;" class="max-h-[720px] overflow-y-auto">
+          <div id="pvPromo" style="background:#d7f148;color:#14150e;" class="px-4 py-1.5 text-center text-[11px] font-extrabold">
+            VEGAS DISCOUNT DEPOT • NORTH LAS VEGAS LOCAL PICKUP (CRAIG &amp; LOSEE) &amp; NATIONWIDE SHIPPING
+          </div>
+          <div class="bg-white border-b border-stone-300 px-6 py-4 flex flex-wrap justify-between items-center gap-2">
+            <div>
+              <div id="pvBrand" class="text-xl font-black text-stone-900">VEGAS DISCOUNT DEPOT</div>
+              <div class="text-xs text-stone-500">100% Standalone Storefront • Universal Headless Graph Schema</div>
+            </div>
+            <button onclick="switchView('checkout')" class="px-4 py-2 rounded-xl bg-stone-900 text-white font-bold text-xs">
+              🛒 Customer Cart (<span id="pvCartCnt">0</span> items • $<span id="pvCartSum">0.00</span>)
+            </button>
+          </div>
+
+          <!-- Generative Sandboxed App Customizer Slot -->
+          <div id="sandboxWidgetSlot" class="hidden bg-indigo-950 text-white px-6 py-3 flex justify-between items-center text-xs">
+            <span>🧩 <strong>Sandboxed Custom Loyalty &amp; Popcorn Auction Bracket Active:</strong> Earn 5% Cashback Points + Anti-Snipe Protection</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold">ZERO APP BLOAT</span>
+          </div>
+
+          <!-- Shoppable Podcast & Stream Bar -->
+          <div class="bg-stone-900 text-stone-100 px-6 py-2.5 flex flex-wrap justify-between items-center gap-2 text-xs">
+            <div><span class="px-2 py-0.5 rounded bg-emerald-400 text-stone-950 font-black text-[10px] mr-2">🎙️ LIVE STREAM &amp; PODCAST</span><strong id="pvPodTitle">Ep 01: Vegas Discount Depot — Warehouse Deals &amp; Featured Lots</strong></div>
+            <span id="pvCount" class="font-mono text-emerald-400">0 Items Live</span>
+          </div>
+
+          <div class="p-6">
+            <div id="pvGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VIEW 3: SOVEREIGN CUSTOMER CHECKOUT LEDGER -->
+  <section id="view-checkout" class="hidden max-w-4xl w-full mx-auto px-4 py-8">
+    <div class="rounded-3xl bg-white text-slate-900 p-8 shadow-2xl space-y-6">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+        <div>
+          <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-black text-xs">SOVEREIGN CHECKOUT LEDGER • STRIPE RADAR + TAXJAR</span>
+          <h2 class="text-2xl font-black mt-1">Vegas Discount Depot — Customer Checkout</h2>
+        </div>
+        <button onclick="switchView('wizard')" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs">← Back to Live Storefront</button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-3">
+          <div class="text-sm font-bold">Customer Shipping / Local Pickup</div>
+          <input id="chkName" name="chkName" aria-label="Customer Name" type="text" value="" placeholder="Customer Full Name" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+          <input id="chkAddress" name="chkAddress" aria-label="Customer Address" type="text" value="" placeholder="Street Address, City, State" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+          <div>
+            <label for="chkZip" class="text-xs text-slate-500">Buyer Zip Code</label>
+            <input id="chkZip" name="chkZip" type="text" value="89030" class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-300 text-sm font-mono" />
+          </div>
+          <input id="chkCard" name="chkCard" aria-label="Payment Card" type="text" value="" placeholder="Card / Apple Pay / Klarna Ready" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-mono" />
+        </div>
+        <div class="p-5 rounded-2xl bg-slate-100 border border-slate-300 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="font-extrabold text-sm mb-2">Order Ledger Summary</div>
+            <div id="chkItems"></div>
+            <div class="text-xs space-y-1 pt-3">
+              <div class="flex justify-between"><span>Subtotal:</span><strong id="chkSub">$0.00</strong></div>
+              <div class="flex justify-between"><span>Automated Regional Tax (NV 8.38%):</span><strong id="chkTax">$0.00</strong></div>
+              <div class="flex justify-between text-base font-black pt-2 border-t border-slate-300"><span>Total Capture:</span><span id="chkTot">$0.00</span></div>
+            </div>
+          </div>
+          <button onclick="completeSovereignCheckout()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow">✅ Authorize Payment</button>
+        </div>
+      </div>
+      <div id="chkReceiptBox" class="hidden p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-500 text-emerald-950 text-xs leading-relaxed"></div>
+    </div>
+  </section>
+
+
+  <script src="suite_engine.js"></script>
+<script src="/cyra_runtime_enforcer.js"></script>
+<script src="/universal_verbal_ai.js"></script>
+<!-- FIX 2 (2026-11-26): storefront guard — dedupe SKUs, fix prices, fix warehouse (undefined) -->
+<style>
+  .price-badge, .verified-badge { margin-left: 8px; }
+  [class*="price"] + [class*="Verified"], [class*="price"] + [class*="verified"] { margin-left: 8px; }
+</style>
+<script>
+(function(){
+  function normSku(s){ return String(s||'').replace(/^nellis-/i,'').trim(); }
+  function fixPrice(v){ var n = parseFloat(String(v).replace(/[^0-9.]/g,'')); return isNaN(n) ? v : '$' + n.toFixed(2); }
+  function cleanCatalog(list){
+    if(!Array.isArray(list)) return list;
+    var seen = {};
+    return list.filter(function(it){
+      var sku = normSku(it.sku || it.id || it.itemId);
+      if(sku && seen[sku]) return false;
+      if(sku) seen[sku] = true;
+      if(it.sku) it.sku = sku;
+      if(it.price != null) it.price = fixPrice(it.price);
+      if(!it.loc || String(it.loc).indexOf('undefined') !== -1) it.loc = 'North Las Vegas';
+      if(it.verified_location && String(it.verified_location).indexOf('undefined') !== -1) it.verified_location = 'North Las Vegas';
+      return true;
+    });
+  }
+  var _renderCount = 0;
+  if (typeof window.renderProductCard === 'function') {
+    var _origRender = window.renderProductCard;
+    window.renderProductCard = function(it, idx){
+      if (_renderCount >= 12) return;
+      _renderCount++;
+      return _origRender(it, idx);
+    };
+  }
+  function apply(){
+    if(Array.isArray(window.VDD_CATALOG)) window.VDD_CATALOG = cleanCatalog(window.VDD_CATALOG);
+    if(Array.isArray(window.VDD_LIVE_PRODUCTS)) window.VDD_LIVE_PRODUCTS = cleanCatalog(window.VDD_LIVE_PRODUCTS);
+    document.body.innerHTML = document.body.innerHTML.replace(/North Las Vegas Warehouse \(undefined\)/g, 'North Las Vegas Warehouse');
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('vdd:catalog-locked', apply);
+})();
+</script>
+</body>
+
+</html>

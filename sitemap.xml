@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- URLs below are the public pages listed in the staging sitemap (spark.mateflowlabs.com/sitemap.xml, 2026-11-22/23).
-     Verify each returns 200 on mateflowlabs.com before submitting this sitemap. admin.html is intentionally excluded. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mateflowlabs.com/</loc><lastmod>2026-11-24</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>  <url><loc>https://mateflowlabs.com/Storefront_Demo.html</loc><lastmod>2026-11-22</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mateflowlabs.com/standalone-website-builder.html</loc><lastmod>2026-11-22</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mateflowlabs.com/universal-widget-studio.html</loc><lastmod>2026-11-22</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mateflowlabs.com/mateflow-master-unified.html</loc><lastmod>2026-11-22</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mateflowlabs.com/mateflow-master-blueprint-145.html</loc><lastmod>2026-11-22</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mateflowlabs.com/spatial.html</loc><lastmod>2026-11-22</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url></urlset>
+  <url><loc>https://mateflowlabs.com/</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mateflowlabs.com/demo.html</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mateflowlabs.com/investors.html</loc><lastmod>2026-11-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mateflowlabs.com/Storefront_Demo.html</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mateflowlabs.com/standalone-website-builder.html</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mateflowlabs.com/universal-widget-studio.html</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mateflowlabs.com/mateflow-master-unified.html</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mateflowlabs.com/mateflow-master-blueprint-145.html</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mateflowlabs.com/spatial.html</loc><lastmod>2026-11-27</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+</urlset>

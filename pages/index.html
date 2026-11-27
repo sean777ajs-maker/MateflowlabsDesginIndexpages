@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Mateflowlabs — Alkaline OS. Build, list, and sell with a guided 6-step store builder, live storefront, and multi-channel sync.">
+<meta name="description" content="Mateflowlabs — Akaline OS. Build, list, and sell with a guided 6-step store builder, live storefront, and multi-channel sync.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Mateflowlabs — Alkaline OS">
-<meta property="og:description" content="Mateflowlabs — Alkaline OS. Build, list, and sell with a guided 6-step store builder, live storefront, and multi-channel sync.">
+<meta property="og:title" content="Mateflowlabs — Akaline OS">
+<meta property="og:description" content="Mateflowlabs — Akaline OS. Build, list, and sell with a guided 6-step store builder, live storefront, and multi-channel sync.">
 <meta property="og:url" content="https://mateflowlabs.com/">
 <meta property="og:site_name" content="Mateflowlabs">
-  <title>Alkaline OS — Guided Sign-Up, AI Flowchart, Live Storefront & Beyond-Shopify VC Architecture</title>
+  <title>Akaline OS — AI Storefront Builder & Multi-Channel Checkout</title>
   <link rel="stylesheet" href="/static/tailwind.min.css">
   <script src="vdd_catalog.js"></script>
   <style>
@@ -26,7 +26,7 @@
   <header class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800 px-4 py-2.5">
     <div class="max-w-[1650px] mx-auto flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2">
-        <span class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-emerald-500 font-black text-xs text-white">ALKALINE OS</span>
+        <span class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-emerald-500 font-black text-xs text-white">AKALINE OS</span>
         <span class="text-xs font-bold text-slate-300 hidden sm:inline">Beginner-Guided Builder • Live Shopify Scraper • Sovereign Checkout</span>
       </div>
       <div class="flex flex-wrap items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
@@ -48,7 +48,7 @@
       <div class="flex justify-between items-center border-b border-slate-800 pb-4">
         <div>
           <span class="text-xs font-mono text-emerald-400 font-bold">STEP 1 OF 6 • NEW MERCHANT ONBOARDING DOOR</span>
-          <h1 class="text-2xl font-black text-white mt-1">Create Your Alkaline Account &amp; Storefront</h1>
+          <h1 class="text-2xl font-black text-white mt-1">Create Your Akaline Account &amp; Storefront</h1>
           <p class="text-xs text-slate-400">Zero experience needed. Right after this step, our AI Flowchart walks you through everything step-by-step.</p>
         </div>
         <button onclick="finishSignup()" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs">Skip to Guided Builder ➔</button>
@@ -73,7 +73,7 @@
   <section id="view-wizard" class="flex-1 max-w-[1650px] w-full mx-auto px-4 py-4 space-y-4">
     <!-- 6-Step Interactive Flowchart Bar -->
     <div class="rounded-2xl bg-slate-900 border border-slate-800 p-3.5">
-      <div class="text-xs font-bold text-emerald-400 mb-2">🗺️ INTERACTIVE BEGINNER FLOWCHART (Click any step below, or click the guided options on the left — your website stays live on the right!)</div>
+      <div class="text-xs font-bold text-emerald-400 mb-2">🗺️ INTERACTIVE BEGINNER FLOWCHART (Click any step below, or click the guided options on the left — see it live in the storefront demo.)</div>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
         <button onclick="goStep(1)" id="fn-1" class="flow-node done text-left p-2.5 rounded-xl border border-slate-800 bg-slate-950"><div class="text-[10px] font-mono text-indigo-400 font-bold">STEP 1 ✓</div><div class="text-xs font-bold text-white">1. Sign-Up &amp; Plan</div></button>
         <button onclick="goStep(2)" id="fn-2" class="flow-node active text-left p-2.5 rounded-xl border border-slate-800 bg-slate-950"><div class="text-[10px] font-mono text-emerald-400 font-bold">STEP 2 ➔</div><div class="text-xs font-bold text-white">2. Scrape Shopify/URL</div></button>
@@ -106,85 +106,13 @@
         </div>
       </div>
 
-      <!-- Right 7 Cols: Live Standalone Website (Never Disappears!) -->
-      <div class="lg:col-span-7 rounded-2xl border-2 border-emerald-500 overflow-hidden shadow-2xl">
-        <div class="bg-slate-950 px-4 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-slate-800">
-          <span id="pvUrl" class="font-mono text-xs text-emerald-400">https://vegasdiscountdepot.com (Live Standalone Storefront)</span>
-          <div class="flex gap-2">
-            <button onclick="switchView('checkout')" class="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs">💳 Test Customer Checkout</button>
-            <button onclick="downloadStandaloneFile()" class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-bold text-xs">💾 Save HTML to Desktop</button>
-          </div>
-        </div>
-
-        <div id="pvViewport" style="background:#f5f3ee;color:#171815;" class="max-h-[720px] overflow-y-auto">
-          <div id="pvPromo" style="background:#d7f148;color:#14150e;" class="px-4 py-1.5 text-center text-[11px] font-extrabold">
-            VEGAS DISCOUNT DEPOT • NORTH LAS VEGAS LOCAL PICKUP (CRAIG &amp; LOSEE) &amp; NATIONWIDE SHIPPING
-          </div>
-          <div class="bg-white border-b border-stone-300 px-6 py-4 flex flex-wrap justify-between items-center gap-2">
-            <div>
-              <div id="pvBrand" class="text-xl font-black text-stone-900">VEGAS DISCOUNT DEPOT</div>
-              <div class="text-xs text-stone-500">100% Standalone Storefront • Universal Headless Graph Schema</div>
-            </div>
-            <button onclick="switchView('checkout')" class="px-4 py-2 rounded-xl bg-stone-900 text-white font-bold text-xs">
-              🛒 Customer Cart (<span id="pvCartCnt">0</span> items • $<span id="pvCartSum">0.00</span>)
-            </button>
-          </div>
-
-          <!-- Generative Sandboxed App Customizer Slot -->
-          <div id="sandboxWidgetSlot" class="hidden bg-indigo-950 text-white px-6 py-3 flex justify-between items-center text-xs">
-            <span>🧩 <strong>Sandboxed Custom Loyalty &amp; Popcorn Auction Bracket Active:</strong> Earn 5% Cashback Points + Anti-Snipe Protection</span>
-            <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold">ZERO APP BLOAT</span>
-          </div>
-
-          <!-- Shoppable Podcast & Stream Bar -->
-          <div class="bg-stone-900 text-stone-100 px-6 py-2.5 flex flex-wrap justify-between items-center gap-2 text-xs">
-            <div><span class="px-2 py-0.5 rounded bg-emerald-400 text-stone-950 font-black text-[10px] mr-2">🎙️ LIVE STREAM &amp; PODCAST</span><strong id="pvPodTitle">Ep 01: Vegas Discount Depot — Warehouse Deals &amp; Featured Lots</strong></div>
-            <span id="pvCount" class="font-mono text-emerald-400">0 Items Live</span>
-          </div>
-
-          <div class="p-6">
-            <div id="pvGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
-          </div>
-        </div>
+      <!-- Storefront demo moved to /demo.html (first pass 2026-11-27): static preview only -->
+      <div class="lg:col-span-7 rounded-2xl border-2 border-emerald-500 overflow-hidden shadow-2xl bg-slate-900 p-8">
+        <div class="text-[10px] font-mono text-emerald-400 font-bold">LIVE STOREFRONT DEMO</div>
+        <h2 class="text-2xl font-black text-white mt-2">Vegas Discount Depot — Live Storefront Demo</h2>
+        <p class="text-sm text-slate-300 mt-2">See the live storefront demo — Vegas Discount Depot, 12 featured items, with customer checkout. Local pickup in North Las Vegas (Craig &amp; Losee) and nationwide shipping.</p>
+        <a href="/demo.html" class="inline-block mt-4 px-5 py-3 rounded-xl bg-emerald-500 text-slate-950 font-black text-sm">See the live storefront demo &rarr;</a>
       </div>
-    </div>
-  </section>
-
-  <!-- VIEW 3: SOVEREIGN CUSTOMER CHECKOUT LEDGER -->
-  <section id="view-checkout" class="hidden max-w-4xl w-full mx-auto px-4 py-8">
-    <div class="rounded-3xl bg-white text-slate-900 p-8 shadow-2xl space-y-6">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-4">
-        <div>
-          <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-black text-xs">SOVEREIGN CHECKOUT LEDGER • STRIPE RADAR + TAXJAR + 5 7/8 x 8 USPS LABEL</span>
-          <h2 class="text-2xl font-black mt-1">Vegas Discount Depot — Customer Checkout</h2>
-        </div>
-        <button onclick="switchView('wizard')" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs">← Back to Live Storefront</button>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="space-y-3">
-          <div class="text-sm font-bold">Customer Shipping / Local Pickup</div>
-          <input id="chkName" name="chkName" aria-label="Customer Name" type="text" value="" placeholder="Customer Full Name" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
-          <input id="chkAddress" name="chkAddress" aria-label="Customer Address" type="text" value="" placeholder="Street Address, City, State" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
-          <div>
-            <label for="chkZip" class="text-xs text-slate-500">Buyer Zip Code (Try 33122 Miami to test Freight-Forwarder Shield)</label>
-            <input id="chkZip" name="chkZip" type="text" value="89030" class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-300 text-sm font-mono" />
-          </div>
-          <input id="chkCard" name="chkCard" aria-label="Payment Card" type="text" value="" placeholder="Card / Apple Pay / Klarna Ready" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-mono" />
-        </div>
-        <div class="p-5 rounded-2xl bg-slate-100 border border-slate-300 flex flex-col justify-between space-y-4">
-          <div>
-            <div class="font-extrabold text-sm mb-2">Order Ledger Summary</div>
-            <div id="chkItems"></div>
-            <div class="text-xs space-y-1 pt-3">
-              <div class="flex justify-between"><span>Subtotal:</span><strong id="chkSub">$0.00</strong></div>
-              <div class="flex justify-between"><span>Automated Regional Tax (NV 8.38%):</span><strong id="chkTax">$0.00</strong></div>
-              <div class="flex justify-between text-base font-black pt-2 border-t border-slate-300"><span>Total Capture:</span><span id="chkTot">$0.00</span></div>
-            </div>
-          </div>
-          <button onclick="completeSovereignCheckout()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow">✅ Authorize Payment &amp; Dispatch 5 7/8 x 8 Pick/Ship Label</button>
-        </div>
-      </div>
-      <div id="chkReceiptBox" class="hidden p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-500 text-emerald-950 text-xs leading-relaxed"></div>
     </div>
   </section>
 
@@ -200,68 +128,8 @@
 <script src="/cyra_runtime_enforcer.js"></script>
 <script src="/universal_verbal_ai.js"></script>
 
-<!-- VDD_LIVE_LOCK_SWITCH_START -->
-<div id="vdd-live-lock-bar" style="position:fixed;bottom:14px;right:14px;z-index:999999;background:#0f172a;color:#f8fafc;border:2px solid #22c55e;border-radius:10px;padding:10px 14px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,0.45);display:flex;align-items:center;gap:12px;">
-  <span style="font-weight:700;color:#4ade80;letter-spacing:0.4px;">● CATALOG LOCK:</span>
-  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;">
-    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-live" value="live" checked style="accent-color:#22c55e;cursor:pointer;">
-    <span>LIVE eBay (<span id="vdd-live-count-badge">1161</span> Locked)</span>
-  </label>
-  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;color:#94a3b8;">
-    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-auto" value="auto_lock" style="accent-color:#38bdf8;cursor:pointer;">
-    <span>Auto-Lock Sync</span>
-  </label>
-  <button id="vdd-force-reload-btn" style="background:#22c55e;color:#052e16;border:none;border-radius:6px;padding:4px 8px;font-weight:700;cursor:pointer;">Verify Live</button>
-</div>
-<script>
-(function(){
-  if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-    location.replace('https://' + location.host + location.pathname + location.search + location.hash);
-  }
-  function enforceLiveCatalog(mode) {
-    localStorage.setItem('VDD_CATALOG_LOCK_MODE', mode || 'live');
-    var raw = window.VDD_LIVE_PRODUCTS || window.VDD_CATALOG || [];
-    var items = raw.filter(function(it){
-      var id = String((it && (it.id || it.itemId || it.sku)) || '');
-      return id.indexOf('STAGED-') !== 0;
-    });
-    window.VDD_CATALOG = items;
-    window.VDD_LIVE_PRODUCTS = items;
-    var badge = document.getElementById('vdd-live-count-badge');
-    if (badge && items.length) badge.textContent = String(items.length);
-    if (typeof window.renderProducts === 'function') window.renderProducts(items);
-    if (typeof window.renderCatalog === 'function') window.renderCatalog(items);
-    if (typeof window.loadCatalog === 'function') window.loadCatalog(items);
-    window.dispatchEvent(new CustomEvent('vdd:catalog-locked', { detail: { count: items.length, mode: mode } }));
-  }
-  document.addEventListener('change', function(e){
-    if (e.target && e.target.name === 'vdd_catalog_mode') {
-      enforceLiveCatalog(e.target.value);
-      var bar = document.getElementById('vdd-live-lock-bar');
-      if (bar) bar.style.borderColor = e.target.value === 'live' ? '#22c55e' : '#38bdf8';
-    }
-  });
-  document.addEventListener('click', function(e){
-    if (e.target && e.target.id === 'vdd-force-reload-btn') {
-      var s = document.createElement('script');
-      s.src = '/vdd_live_products.js?t=' + Date.now();
-      s.onload = function(){
-        enforceLiveCatalog('live');
-        e.target.textContent = 'Locked (' + (window.VDD_CATALOG ? window.VDD_CATALOG.length : 0) + ') ✓';
-      };
-      document.head.appendChild(s);
-    }
-  });
-  window.addEventListener('DOMContentLoaded', function(){
-    var saved = localStorage.getItem('VDD_CATALOG_LOCK_MODE') || 'live';
-    var r = document.getElementById(saved === 'auto_lock' ? 'vdd-radio-auto' : 'vdd-radio-live');
-    if (r) r.checked = true;
-    enforceLiveCatalog(saved);
-    setTimeout(function(){ enforceLiveCatalog(saved); }, 700);
-  });
-})();
-</script>
-<!-- VDD_LIVE_LOCK_SWITCH_END -->
+<!-- Catalog lock moved to authenticated admin dashboard — not on public page. -->
+
 
 <!-- FIX 2 (2026-11-26): storefront guard — dedupe SKUs, fix prices, fix warehouse (undefined) -->
 <style>
@@ -303,6 +171,25 @@
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
   window.addEventListener('vdd:catalog-locked', apply);
+})();
+</script>
+
+<!-- FIRST PASS 2026-11-27: storefront demo moved to /demo.html. Any demo action here redirects there instead of crashing on a missing storefront grid. -->
+<script>
+(function(){
+  function goDemo(){ window.location.href = '/demo.html'; }
+  if (typeof window.runLiveScrape === 'function') window.runLiveScrape = goDemo;
+  if (typeof window.downloadStandaloneFile === 'function') window.downloadStandaloneFile = goDemo;
+  if (typeof window.addCustomCardLive === 'function') window.addCustomCardLive = goDemo;
+  if (typeof window.setStoreTheme === 'function') window.setStoreTheme = goDemo;
+  if (typeof window.completeSovereignCheckout === 'function') window.completeSovereignCheckout = goDemo;
+  window.finishSignup = goDemo;
+  var _switch = window.switchView;
+  window.switchView = function(v){
+    if (v === 'checkout') { goDemo(); return; }
+    if (v === 'vc') { window.location.href = '/investors.html'; return; }
+    return _switch(v);
+  };
 })();
 </script>
 </body>
