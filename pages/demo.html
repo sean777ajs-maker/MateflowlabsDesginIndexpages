@@ -165,6 +165,29 @@
   window.addEventListener('vdd:catalog-locked', apply);
 })();
 </script>
+
+<!-- FIX2 2026-11-27: signup carryover. finishSignup on the homepage stores the store name/URL in sessionStorage; demo.html has no suStore/suUrl inputs, so pre-fill the equivalents here: pvBrand (store name) and pvUrl (store URL). Runs immediately (script is at end of body) and again on DOMContentLoaded, after the Fix 2 guard's innerHTML rewrite. -->
+<script>
+(function(){
+  function prefillFromSignup(){
+    try {
+      var store = sessionStorage.getItem('akaline_signup_store');
+      var url = sessionStorage.getItem('akaline_signup_url');
+      if (store) {
+        var brand = document.getElementById('pvBrand');
+        if (brand) brand.textContent = store;
+      }
+      if (url) {
+        var u = String(url).replace(/^https?:\/\//i, '').replace(/\/$/, '');
+        var pv = document.getElementById('pvUrl');
+        if (pv) pv.textContent = 'https://' + u + ' (Live Standalone Storefront)';
+      }
+    } catch (e) {}
+  }
+  prefillFromSignup();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prefillFromSignup);
+})();
+</script>
 </body>
 
 </html>

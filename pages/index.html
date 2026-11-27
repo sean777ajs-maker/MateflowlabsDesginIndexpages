@@ -183,7 +183,15 @@
   if (typeof window.addCustomCardLive === 'function') window.addCustomCardLive = goDemo;
   if (typeof window.setStoreTheme === 'function') window.setStoreTheme = goDemo;
   if (typeof window.completeSovereignCheckout === 'function') window.completeSovereignCheckout = goDemo;
-  window.finishSignup = goDemo;
+  window.finishSignup = function(){
+    try {
+      var store = document.getElementById('suStore');
+      var url = document.getElementById('suUrl');
+      if (store && store.value) sessionStorage.setItem('akaline_signup_store', store.value);
+      if (url && url.value) sessionStorage.setItem('akaline_signup_url', url.value);
+    } catch (e) {}
+    window.location.href = '/demo.html';
+  };
   var _switch = window.switchView;
   window.switchView = function(v){
     if (v === 'checkout') { goDemo(); return; }
