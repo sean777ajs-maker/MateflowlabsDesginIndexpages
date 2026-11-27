@@ -285,5 +285,40 @@
 })();
 </script>
 <!-- VDD_LIVE_LOCK_SWITCH_END -->
+
+<!-- FIX 2 (2026-11-26): storefront guard — dedupe SKUs, fix prices, fix warehouse (undefined) -->
+<style>
+  .price-badge, .verified-badge { margin-left: 8px; }
+  [class*="price"] + [class*="Verified"], [class*="price"] + [class*="verified"] { margin-left: 8px; }
+</style>
+<script>
+(function(){
+  function normSku(s){ return String(s||'').replace(/^nellis-/i,'').trim(); }
+  function fixPrice(v){ var n = parseFloat(String(v).replace(/[^0-9.]/g,'')); return isNaN(n) ? v : '$' + n.toFixed(2); }
+  function cleanCatalog(list){
+    if(!Array.isArray(list)) return list;
+    var seen = {};
+    return list.filter(function(it){
+      var sku = normSku(it.sku || it.id || it.itemId);
+      if(sku && seen[sku]) return false;
+      if(sku) seen[sku] = true;
+      if(it.sku) it.sku = sku;
+      if(it.price != null) it.price = fixPrice(it.price);
+      if(!it.loc || String(it.loc).indexOf('undefined') !== -1) it.loc = 'North Las Vegas';
+      if(it.verified_location && String(it.verified_location).indexOf('undefined') !== -1) it.verified_location = 'North Las Vegas';
+      return true;
+    });
+  }
+  function apply(){
+    if(Array.isArray(window.VDD_CATALOG)) window.VDD_CATALOG = cleanCatalog(window.VDD_CATALOG);
+    if(Array.isArray(window.VDD_LIVE_PRODUCTS)) window.VDD_LIVE_PRODUCTS = cleanCatalog(window.VDD_LIVE_PRODUCTS);
+    document.body.innerHTML = document.body.innerHTML.replace(/North Las Vegas Warehouse \(undefined\)/g, 'North Las Vegas Warehouse');
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('vdd:catalog-locked', apply);
+})();
+</script>
 </body>
+
 </html>
