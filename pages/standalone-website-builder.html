@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" data-mf-scheme="imperium">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta name="description" content="Mateflowlabs — Standalone Website Builder & God Mode Advertising Suite. Build and host an independent website.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Alkaline — Standalone Website Builder & God Mode Advertising Suite">
+<meta property="og:description" content="Mateflowlabs — Standalone Website Builder & God Mode Advertising Suite. Build and host an independent website.">
+<meta property="og:url" content="https://mateflowlabs.com/standalone-website-builder.html">
+<meta property="og:site_name" content="Mateflowlabs">
+<title>Alkaline — Standalone Website Builder & God Mode Advertising Suite</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Alata&family=Cinzel:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Orbitron:wght@600;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mateflow-dark-theme.css" />
+<style>
+  *{user-select:none!important;-webkit-user-select:none!important;}
+  input,select,textarea{user-select:text!important;-webkit-user-select:text!important;}
+  @media print {
+    header, aside, .no-print { display: none !important; }
+    body, main, #liveStandaloneStage { display: block !important; background: #fff !important; color: #000 !important; width: 8.5in; }
+  }
+</style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP UNIFIED CONVERSION & BUILDER HEADER -->
+  <header class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800 px-5 py-3">
+    <div class="max-w-[1800px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center font-black text-slate-950 text-lg">🌐</div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-black text-base text-white">STANDALONE WEBSITE BUILDER &amp; GOD MODE AD ENGINE</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-mono font-black text-[10px]">DIVISION 3 + AD SUITE</span>
+          </div>
+          <div class="text-[11px] text-slate-400 font-mono">1-Click Client Storefront Provisioner • 3000ms Fluid-Inventory-Strip • 4K Video Encapsulation</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links across All Master Surfaces -->
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <a href="APEX_GOD_MODE_MASTER_ADMIN.html" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-amber-300 font-black no-underline">👑 God Mode Admin</a>
+        <a href="mateflow-master-unified.html" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-bold no-underline">🏛️ Master Suite</a>
+        <a href="imperium-10-engines.html" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-rose-400 font-bold no-underline">⚡ 10 Imperium Engines</a>
+        <a href="spatial.html" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-emerald-300 font-bold no-underline">🌌 3.5D Spatial Web</a>
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-indigo-600 text-white font-black cursor-pointer">🖨️ Export 8.5×11 PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE: LEFT (4 COLS) = STANDALONE BUILDER + AD CONTROLS | RIGHT (8 COLS) = LIVE STANDALONE WEBSITE + FLUID CAROUSEL + 4K VIDEO HUB -->
+  <main class="max-w-[1800px] w-full mx-auto p-5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-1">
+
+    <!-- LEFT 4 COLS: STANDALONE WEBSITE BUILDER ARCHITECT & AD SUITE CONTROLS -->
+    <aside class="lg:col-span-4 rounded-3xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase">1. STANDALONE STOREFRONT ARCHITECT</span>
+        <h2 class="text-lg font-black text-white mt-0.5">Build &amp; Host Independent Website</h2>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Website / Brand Title</label>
+          <input id="bldSiteName" type="text" value="Vegas Discount Depot" oninput="syncLiveBuilderPreview()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-bold" />
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Hero Headline &amp; Value Proposition</label>
+          <input id="bldHeroHeadline" type="text" value="Verified North Las Vegas Warehouse Deals — Ready for Pickup or Nationwide Shipping" oninput="syncLiveBuilderPreview()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-bold mb-1">Custom Domain / Slug</label>
+            <input id="bldSlug" type="text" value="vegas-discount-depot" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-emerald-400 font-mono" />
+          </div>
+          <div>
+            <label class="block text-slate-300 font-bold mb-1">Visual Skin (14 Worlds)</label>
+            <select id="bldSkin" onchange="window.setStitchScheme && window.setStitchScheme(this.value)" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white font-bold">
+              <option value="imperium">08 • Imperium (Cinzel)</option>
+              <option value="futuristic-dark-synthwave">10 • Dark Synthwave (#FF007F)</option>
+              <option value="god-mode-gold">09b • God Mode Gold</option>
+              <option value="metallic-webgl">09d • Metallic Bronze WebGL</option>
+              <option value="quantum-manifold">03 • Quantum Manifold</option>
+              <option value="polymorphic-semantic">06 • Polymorphic Semantic</option>
+              <option value="light-morning">01 • Light Morning</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Add Custom Product / Course / Podcast / Service to Standalone Site -->
+        <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+          <div class="font-black text-emerald-400 uppercase font-mono text-[10px]">2. Add Custom Product / Offer to Website</div>
+          <input id="bldItemTitle" type="text" placeholder="Item / Service / Course Title..." class="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white" />
+          <div class="grid grid-cols-2 gap-2">
+            <input id="bldItemPrice" type="number" step="0.01" placeholder="Price USD (e.g. 49.99)" class="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white font-mono" />
+            <select id="bldItemType" class="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white">
+              <option value="Products">Physical Product</option>
+              <option value="Auctions">Live Auction Lot</option>
+              <option value="Memberships">Paid Membership</option>
+              <option value="Courses">Course / Coaching</option>
+            </select>
+          </div>
+          <button onclick="addCustomBuilderItem()" class="w-full py-2 rounded-xl bg-emerald-500 text-slate-950 font-black cursor-pointer">+ Inject Item Into Standalone Website</button>
+        </div>
+
+        <!-- 3. High-Velocity 1080p/4K Video Encapsulation Control -->
+        <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+          <div class="font-black text-indigo-400 uppercase font-mono text-[10px]">3. 1080p / 4K Video &amp; Stream Encapsulation</div>
+          <input id="bldVideoTitle" type="text" value="Live Warehouse Stream &amp; Product Walkthrough (4K-Fluid-Scale • <50ms Overlay)" oninput="syncLiveBuilderPreview()" class="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white" />
+          <label class="block w-full py-2 rounded-xl bg-indigo-600 text-white font-black text-center cursor-pointer">
+            🎬 Upload Local 1080p/4K Promotional Video<input type="file" accept="video/*" class="hidden" onchange="loadEncapsulatedVideo(this)" />
+          </label>
+        </div>
+
+        <!-- Launch / Provision / Export Buttons -->
+        <div class="space-y-2 pt-2">
+          <button onclick="provisionLiveStandaloneStore()" class="w-full py-3 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs shadow-lg cursor-pointer">
+            🚀 1-Click Provision &amp; Host Live on Server (/stores/&lt;slug&gt;/)
+          </button>
+          <button onclick="exportStandaloneHtmlFile()" class="w-full py-2.5 rounded-xl bg-slate-800 text-white font-bold text-xs border border-slate-700 cursor-pointer">
+            💾 Download Standalone Website (.HTML) to Desktop
+          </button>
+        </div>
+        <div id="builderProvisionReceipt" class="p-3 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-emerald-300">
+          Ready: 435 1:1 Verified SKUs loaded into Fluid-Inventory-Strip (3000ms cycle).
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT 8 COLS: LIVE STANDALONE WEBSITE STAGE + GOD MODE ADVERTISING SUITE -->
+    <section id="liveStandaloneStage" class="lg:col-span-8 rounded-3xl bg-slate-900 border-2 border-emerald-500/60 overflow-hidden shadow-2xl flex flex-col">
+
+      <!-- 4. Automated Conversion Header Anchor (Products | Auctions | Memberships | Courses + Seamless Connect v2) -->
+      <div class="px-6 py-4 bg-slate-950 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase">SEAMLESS-CONNECT-V2 • STANDALONE STOREFRONT</span>
+          <h1 id="stageBrandTitle" class="text-2xl font-black text-white" style="font-family:Cinzel,serif;">Vegas Discount Depot</h1>
+        </div>
+        <nav class="flex flex-wrap items-center gap-2 text-xs font-bold">
+          <button onclick="filterStageCat('ALL')" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-black cursor-pointer">All Offers</button>
+          <button onclick="filterStageCat('Products')" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-white cursor-pointer">Products</button>
+          <button onclick="filterStageCat('Auctions')" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-white cursor-pointer">Auctions</button>
+          <button onclick="filterStageCat('Memberships')" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-white cursor-pointer">Memberships</button>
+          <button onclick="filterStageCat('Courses')" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-white cursor-pointer">Courses</button>
+          <a href="https://alkalinelabs.com/signup" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-black no-underline">🔐 Seamless Sign-In</a>
+        </nav>
+      </div>
+
+      <!-- Contextual Conversion Hero + High-Velocity 1080p/4K Video Encapsulation Hub -->
+      <div class="p-6 border-b border-slate-800 grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+        <div class="md:col-span-7 space-y-3">
+          <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold">ALKALINE-EXECUTIVE-AD-ENGINE • GOD-MODE-OVERRIDE</span>
+          <h2 id="stageHeroHeadline" class="text-2xl sm:text-3xl font-black text-white leading-tight">Verified North Las Vegas Warehouse Deals — Ready for Pickup or Nationwide Shipping</h2>
+          <p class="text-xs text-slate-300">Pickup at 2606 E. La Madre, North Las Vegas, NV 89031 (1-hour advance notice required) or instant Stripe checkout with automated 5 7/8 × 8 USPS label dispatch.</p>
+        </div>
+        <div class="md:col-span-5 rounded-2xl bg-slate-950 border border-slate-800 p-4 space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-mono text-emerald-400">
+            <span>🎬 4K-FLUID-SCALE VIDEO HUB</span>
+            <span>&lt;50ms OVERLAY</span>
+          </div>
+          <video id="stageVideoPlayer" controls class="hidden w-full h-36 rounded-xl bg-black"></video>
+          <div id="stageVideoPlaceholder" class="h-32 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center p-3 text-center">
+            <div id="stageVideoCaption" class="text-xs font-bold text-white">Live Warehouse Stream &amp; Product Walkthrough (4K-Fluid-Scale • &lt;50ms Overlay)</div>
+            <div class="text-[10px] font-mono text-slate-400 mt-1">UI Reflow Protection: Active • Decoupled Local Playback</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Adaptive Feature Carousel (Fluid-Inventory-Strip • 3000ms Auto-Cycle • Max 50 Cards) -->
+      <div class="p-6 border-b border-slate-800 space-y-3">
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase">ADAPTIVE FEATURE CAROUSEL • FLUID-INVENTORY-STRIP (3000ms AUTO-CYCLE)</span>
+            <h3 class="text-base font-black text-white">Live High-Conversion Inventory Strip (<span id="fluidStripCount">0</span> Active Cards)</h3>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="stepFluidCarousel(-1)" class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs text-white cursor-pointer">◀ Prev</button>
+            <button onclick="stepFluidCarousel(1)" class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs text-white cursor-pointer">Next ▶</button>
+          </div>
+        </div>
+        <div id="fluidInventoryStrip" class="flex gap-4 overflow-x-auto pb-2" style="scroll-behavior:smooth;"></div>
+      </div>
+
+      <!-- Main Storefront Catalog Grid -->
+      <div class="p-6 space-y-3">
+        <h3 class="text-base font-black text-white">Storefront Catalog Grid</h3>
+        <div id="builderCatalogGrid" class="product-grid"></div>
+      </div>
+
+      <!-- 5. External Engineering Synchronization Workspace & Comprehensive Diagnostic Footer Anchor -->
+      <div class="p-5 bg-slate-950 border-t border-slate-800 space-y-2 text-[11px] font-mono">
+        <div class="flex flex-wrap justify-between items-center text-emerald-400 font-bold">
+          <span>🛠️ EXTERNAL ENGINEERING SYNCHRONIZATION WORKSPACE (LIVE_LOG_REUSE_FEED)</span>
+          <span>SECURITY: SECURE_VAULT_ENVIRONMENT_PARAMETERS</span>
+        </div>
+        <div id="collabEngineeringLog" class="h-24 overflow-y-auto text-slate-300 space-y-1">
+          <div>[SYNC] Alkaline-Executive-Ad-Engine initialized • Clearance: God-Mode-Override</div>
+          <div>[CAROUSEL] Fluid-Inventory-Strip bound to 1:1 Verified Warehouse Catalog (3000ms cycle, max 50 cards)</div>
+          <div>[VIDEO] Local-High-Resolution-Decoupled-Hub active (1080p / 4K-Fluid-Scale, latency &lt; 50ms)</div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="editable_footer.js"></script>
+  <script src="stitch_polymorphic_schemes.js"></script>
+  <script>
+    var stageItems = [];
+    var stageCategory = 'ALL';
+
+    function logAdSync(msg){
+      var box = document.getElementById('collabEngineeringLog');
+      if(!box) return;
+      var d = document.createElement('div');
+      d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+      box.prepend(d);
+    }
+
+    function syncLiveBuilderPreview(){
+      document.getElementById('stageBrandTitle').textContent = document.getElementById('bldSiteName').value || 'Alkaline Storefront';
+      document.getElementById('stageHeroHeadline').textContent = document.getElementById('bldHeroHeadline').value || '';
+      document.getElementById('stageVideoCaption').textContent = document.getElementById('bldVideoTitle').value || '';
+    }
+
+    function loadEncapsulatedVideo(input){
+      if(!input.files || !input.files[0]) return;
+      var v = document.getElementById('stageVideoPlayer');
+      v.src = URL.createObjectURL(input.files[0]);
+      v.classList.remove('hidden');
+      document.getElementById('stageVideoPlaceholder').classList.add('hidden');
+      logAdSync('Loaded 1080p/4K encapsulated video asset: ' + input.files[0].name);
+    }
+
+    function addCustomBuilderItem(){
+      var t = document.getElementById('bldItemTitle').value.trim() || 'Custom Storefront Offer';
+      var p = parseFloat(document.getElementById('bldItemPrice').value) || 49.99;
+      var c = document.getElementById('bldItemType').value;
+      stageItems.unshift({sku:'CUST-'+Math.floor(Math.random()*9000+1000), title:t, price_usd:p, cat:c, verified_location:'2606 E. La Madre 89031', ground_truth_source_file:'Custom Builder'});
+      document.getElementById('bldItemTitle').value = '';
+      renderBuilderStage();
+      logAdSync('Injected custom ' + c + ' node: ' + t + ' ($' + p.toFixed(2) + ')');
+    }
+
+    window.filterStageCat = function(c){
+      stageCategory = c;
+      renderBuilderStage();
+    };
+
+    function renderBuilderStage(){
+      var filtered = stageItems.filter(function(it){
+        return stageCategory === 'ALL' || (it.cat || 'Products') === stageCategory;
+      }).slice(0, 50);
+
+      document.getElementById('fluidStripCount').textContent = String(filtered.length);
+
+      var strip = document.getElementById('fluidInventoryStrip');
+      if(strip){
+        strip.innerHTML = filtered.map(function(it){
+          return '<div class="min-w-[260px] max-w-[260px] p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between gap-2 shrink-0">' +
+            '<div><span class="text-[10px] font-mono text-emerald-400 font-bold">SKU #' + it.sku + ' • ' + (it.verified_location||'Warehouse') + '</span>' +
+            '<div class="text-xs font-black text-white mt-1 line-clamp-2">' + it.title + '</div></div>' +
+            '<div class="pt-2 border-t border-slate-800 flex justify-between items-center">' +
+              '<span class="text-sm font-black text-emerald-400">$' + Number(it.price_usd).toFixed(2) + '</span>' +
+              '<button onclick="buyStageItem(\''+it.sku+'\')" class="px-2.5 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-[10px] cursor-pointer">Buy Now ➔</button>' +
+            '</div></div>';
+        }).join('');
+      }
+
+      var grid = document.getElementById('builderCatalogGrid');
+      if(grid){
+        grid.innerHTML = filtered.slice(0, 12).map(function(it){
+          return '<div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between gap-3">' +
+            '<div><div class="flex justify-between text-[10px] font-mono text-emerald-400"><span>SKU #' + it.sku + '</span><span>' + (it.verified_location||'New Trailer #4') + '</span></div>' +
+            '<div class="text-sm font-black text-white mt-1.5">' + it.title + '</div></div>' +
+            '<div class="pt-2 border-t border-slate-800 flex justify-between items-center">' +
+              '<span class="text-base font-black text-emerald-400">$' + Number(it.price_usd).toFixed(2) + '</span>' +
+              '<button onclick="buyStageItem(\''+it.sku+'\')" class="px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs cursor-pointer">🛒 Live Checkout</button>' +
+            '</div></div>';
+        }).join('');
+      }
+    }
+
+    window.stepFluidCarousel = function(dir){
+      var strip = document.getElementById('fluidInventoryStrip');
+      if(!strip) return;
+      var step = 280 * dir;
+      if(strip.scrollLeft + step >= strip.scrollWidth - strip.clientWidth) strip.scrollTo({left:0, behavior:'smooth'});
+      else strip.scrollBy({left:step, behavior:'smooth'});
+    };
+    // 3000ms Auto-Cycle Latency per Manifest
+    setInterval(function(){ window.stepFluidCarousel(1); }, 3000);
+
+    window.buyStageItem = async function(sku){
+      logAdSync('Initiating Live Stripe Checkout for SKU #' + sku + '...');
+      try {
+        var r = await fetch('/api/v1/storefront/cart', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({skus:[sku], fulfillment_mode:'pickup', checkout_now:true})
+        });
+        var j = await r.json();
+        if(j && j.stripe_checkout_url){
+          logAdSync('Minted Stripe Session ' + j.stripe_session_id + ' -> Opening Checkout!');
+          window.open(j.stripe_checkout_url, '_blank');
+        }
+      } catch(e){}
+    };
+
+    window.provisionLiveStandaloneStore = async function(){
+      var name = document.getElementById('bldSiteName').value.trim() || 'Vegas Discount Depot';
+      var slug = document.getElementById('bldSlug').value.trim() || 'vegas-discount-depot';
+      var box = document.getElementById('builderProvisionReceipt');
+      try {
+        var r = await fetch('/api/v1/signup-provision', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({name:'', email:'', company:slug, tier:'Growth'})
+        });
+        var j = await r.json();
+        box.innerHTML = '✅ HOSTED LIVE: <a href="' + j.live_store_url + '" target="_blank" class="underline text-white">' + j.live_store_url + ' ↗</a>';
+        logAdSync('Provisioned standalone client store at ' + j.live_store_url);
+      } catch(e){
+        exportStandaloneHtmlFile();
+      }
+    };
+
+    window.exportStandaloneHtmlFile = function(){
+      var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + document.getElementById('bldSiteName').value + '</title><script src="https://cdn.tailwindcss.com"><\/script><link rel="stylesheet" href="https://hub.alkalinelabs.com/mateflow-dark-theme.css"></head><body class="p-6">' + document.getElementById('liveStandaloneStage').innerHTML + '<script src="/cyra_runtime_enforcer.js"></script>
+
+<!-- VDD_LIVE_LOCK_SWITCH_START -->
+<div id="vdd-live-lock-bar" style="position:fixed;bottom:14px;right:14px;z-index:999999;background:#0f172a;color:#f8fafc;border:2px solid #22c55e;border-radius:10px;padding:10px 14px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,0.45);display:flex;align-items:center;gap:12px;">
+  <span style="font-weight:700;color:#4ade80;letter-spacing:0.4px;">● CATALOG LOCK:</span>
+  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;">
+    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-live" value="live" checked style="accent-color:#22c55e;cursor:pointer;">
+    <span>LIVE eBay (<span id="vdd-live-count-badge">1161</span> Locked)</span>
+  </label>
+  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;color:#94a3b8;">
+    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-auto" value="auto_lock" style="accent-color:#38bdf8;cursor:pointer;">
+    <span>Auto-Lock Sync</span>
+  </label>
+  <button id="vdd-force-reload-btn" style="background:#22c55e;color:#052e16;border:none;border-radius:6px;padding:4px 8px;font-weight:700;cursor:pointer;">Verify Live</button>
+</div>
+<script>
+(function(){
+  if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+  }
+  function enforceLiveCatalog(mode) {
+    localStorage.setItem('VDD_CATALOG_LOCK_MODE', mode || 'live');
+    var raw = window.VDD_LIVE_PRODUCTS || window.VDD_CATALOG || [];
+    var items = raw.filter(function(it){
+      var id = String((it && (it.id || it.itemId || it.sku)) || '');
+      return id.indexOf('STAGED-') !== 0;
+    });
+    window.VDD_CATALOG = items;
+    window.VDD_LIVE_PRODUCTS = items;
+    var badge = document.getElementById('vdd-live-count-badge');
+    if (badge && items.length) badge.textContent = String(items.length);
+    if (typeof window.renderProducts === 'function') window.renderProducts(items);
+    if (typeof window.renderCatalog === 'function') window.renderCatalog(items);
+    if (typeof window.loadCatalog === 'function') window.loadCatalog(items);
+    window.dispatchEvent(new CustomEvent('vdd:catalog-locked', { detail: { count: items.length, mode: mode } }));
+  }
+  document.addEventListener('change', function(e){
+    if (e.target && e.target.name === 'vdd_catalog_mode') {
+      enforceLiveCatalog(e.target.value);
+      var bar = document.getElementById('vdd-live-lock-bar');
+      if (bar) bar.style.borderColor = e.target.value === 'live' ? '#22c55e' : '#38bdf8';
+    }
+  });
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.id === 'vdd-force-reload-btn') {
+      var s = document.createElement('script');
+      s.src = '/vdd_live_products.js?t=' + Date.now();
+      s.onload = function(){
+        enforceLiveCatalog('live');
+        e.target.textContent = 'Locked (' + (window.VDD_CATALOG ? window.VDD_CATALOG.length : 0) + ') ✓';
+      };
+      document.head.appendChild(s);
+    }
+  });
+  window.addEventListener('DOMContentLoaded', function(){
+    var saved = localStorage.getItem('VDD_CATALOG_LOCK_MODE') || 'live';
+    var r = document.getElementById(saved === 'auto_lock' ? 'vdd-radio-auto' : 'vdd-radio-live');
+    if (r) r.checked = true;
+    enforceLiveCatalog(saved);
+    setTimeout(function(){ enforceLiveCatalog(saved); }, 700);
+  });
+})();
+</script>
+<!-- VDD_LIVE_LOCK_SWITCH_END -->
+</body></html>';
+      var blob = new Blob([html], {type:'text/html'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (document.getElementById('bldSlug').value || 'standalone-store') + '.html';
+      a.click();
+      logAdSync('Exported standalone HTML file to Desktop.');
+    };
+
+    async function loadInitialCatalog(){
+      try {
+        var r = await fetch('/api/v1/storefront/catalog?limit=50', {cache:'no-store'});
+        if(r.ok){
+          var j = await r.json();
+          if(j && j.items && j.items.length){
+            stageItems = j.items;
+            renderBuilderStage();
+            return;
+          }
+        }
+      } catch(e){}
+      if(window.VDD_CATALOG && window.VDD_CATALOG.length){
+        stageItems = window.VDD_CATALOG.slice(0, 50).map(function(x){
+          return {sku:x.sku, title:x.title, price_usd:x.price, verified_location:x.loc||'New Trailer #4', cat:'Products'};
+        });
+      } else {
+        stageItems = [
+          {sku:'355604', title:'Front Bumper LED Fog Lamp Daytime Running Light Assembly', price_usd:53.98, verified_location:'New Trailer #4', cat:'Products'},
+          {sku:'675407', title:'BPC Organic Down Comforter Queen 750FP Duvet Insert', price_usd:24.99, verified_location:'New Trailer #4', cat:'Products'},
+          {sku:'734788', title:'KouKou Truck Cover Waterproof All Weather 7 Layers', price_usd:24.99, verified_location:'New Trailer #4', cat:'Products'}
+        ];
+      }
+      renderBuilderStage();
+    }
+    loadInitialCatalog();
+  </script>
+<script src="/universal_verbal_ai.js"></script>
+</body>
+</html>

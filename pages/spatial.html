@@ -1,0 +1,524 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mateflowlabs — Alkaline 3.5D WebGL Spatial Universe.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Alkaline — 3.5D WebGL Spatial Universe">
+<meta property="og:description" content="Mateflowlabs — Alkaline 3.5D WebGL Spatial Universe.">
+<meta property="og:url" content="https://mateflowlabs.com/spatial.html">
+<meta property="og:site_name" content="Mateflowlabs">
+  <title>Alkaline — 3.5D WebGL Spatial Universe</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+  globalThis.tailwind = globalThis.tailwind || {};
+  globalThis.tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          'accent': '#00C49F',
+          'light-primary': '#1D6A63',
+          'dark-surface': '#0D1413',
+          'dark-surface-container-low': '#121A19',
+          'dark-on-surface': '#E1EBE8',
+          'dark-on-surface-variant': '#9AA9A6',
+        },
+        fontFamily: {
+          'display': ['"Alata"', 'sans-serif'],
+          'headline': ['"Alata"', 'sans-serif'],
+          'title': ['"Instrument Sans"', 'sans-serif'],
+          'body': ['"Instrument Sans"', 'sans-serif'],
+          'label': ['"Instrument Sans"', 'sans-serif'],
+        }
+      }
+    }
+  };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alata&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    *{user-select:none!important;-webkit-user-select:none!important;}
+    @media print{html,body{display:none!important;}}
+    body {
+      background-color: #030706;
+      color: #E1EBE8;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    @media (min-width: 1024px) {
+      body { overflow: hidden; }
+    }
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    .holo-panel {
+      background: rgba(13, 23, 22, 0.68);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 196, 159, 0.42);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 35px -5px rgba(0, 196, 159, 0.3), inset 0 0 20px rgba(0, 196, 159, 0.15);
+      border-radius: 16px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .holo-panel::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent 40%, rgba(0, 255, 209, 0.1) 50%, transparent 60%);
+      transform: rotate(25deg);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .holo-panel:hover::after { opacity: 1; animation: scanShimmer 1.8s infinite; }
+    @keyframes scanShimmer {
+      0% { transform: translateY(-30%) rotate(25deg); }
+      100% { transform: translateY(30%) rotate(25deg); }
+    }
+    .holo-panel:hover {
+      border-color: rgba(0, 255, 209, 0.85);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 45px rgba(0, 196, 159, 0.55), inset 0 0 25px rgba(0, 196, 159, 0.25);
+      transform: translateZ(24px) translateY(-3px) scale(1.02);
+    }
+    .neon-text-glow {
+      text-shadow: 0 0 12px rgba(0, 196, 159, 0.8), 0 0 28px rgba(0, 196, 159, 0.45);
+      animation: neonFlicker 4s infinite alternate;
+    }
+    @keyframes neonFlicker {
+      0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px rgba(0,196,159,0.8)); }
+      50% { opacity: 0.94; filter: drop-shadow(0 0 18px rgba(0,255,209,0.9)); }
+    }
+  </style>
+</head>
+<body class="min-h-screen w-screen relative font-body antialiased flex flex-col justify-between">
+
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Top Spatial Navigation HUD -->
+  <header class="relative z-30 px-4 md:px-8 py-4 md:py-5 flex flex-wrap items-center justify-between gap-3 pointer-events-auto">
+    <div class="flex items-center gap-3 md:gap-4">
+      <div class="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-tr from-[#1D6A63] to-accent flex items-center justify-center text-black font-extrabold shadow-xl shadow-accent/40 border border-white/20">
+        <span class="material-symbols-outlined text-[24px] md:text-[26px]">view_in_ar</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-headline text-[18px] md:text-[22px] text-white font-bold tracking-tight leading-none">Alkaline 3.5D</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-accent text-black font-bold uppercase tracking-wider">Spatial Layer</span>
+        </div>
+        <p class="text-[11px] md:text-[12px] text-[#A8F0E7] font-mono tracking-wide mt-0.5">Stitch WebGL Matrix · 13 Interconnected Surfaces Active</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2 md:gap-4">
+      <div class="hidden xl:flex items-center gap-3 px-4 py-2 rounded-xl holo-panel text-[12px] font-mono">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+          <span class="text-white font-semibold">13/13 Surfaces Synced</span>
+        </div>
+        <span class="text-[#2F3D3A]">|</span>
+        <span class="text-[#A8F0E7]">FOV: 65°</span>
+        <span class="text-[#2F3D3A]">|</span>
+        <span class="text-accent">Coords: <span id="telemetry-coords">0.20, 0.00, 24.0</span></span>
+      </div>
+
+      <a href="landing.html" class="px-3.5 py-2 rounded-xl holo-panel text-[12px] font-semibold text-white hover:text-accent flex items-center gap-1.5 no-underline">
+        <span class="material-symbols-outlined text-[18px]">public</span>
+        <span>Flat View</span>
+      </a>
+      <a href="https://alkalinelabs.com/community/" class="px-3.5 py-2 rounded-xl holo-panel text-[12px] font-semibold text-white hover:text-accent flex items-center gap-1.5 no-underline">
+        <span class="material-symbols-outlined text-[18px]">meeting_room</span>
+        <span>Enter Lobby</span>
+      </a>
+      <a href="https://alkalinelabs.com/signup" class="px-4 py-2 bg-gradient-to-r from-[#1D6A63] to-accent text-black font-bold text-[12px] rounded-xl shadow-lg shadow-accent/30 hover:opacity-95 flex items-center gap-1.5 no-underline">
+        <span>Sign Up</span>
+        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Central Floating Spatial Viewport HUD (Responsive: Stacks on Mobile/Tablet, 3-Column on Desktop) -->
+  <main class="relative z-20 flex-grow px-4 md:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-6 pointer-events-none">
+    
+    <!-- Left Hologram Surface Cluster (Surfaces 1 - 3) -->
+    <div class="w-full lg:w-80 space-y-3.5 pointer-events-auto order-2 lg:order-1">
+      <div class="text-[11px] font-mono uppercase tracking-widest text-accent font-bold px-2 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[14px]">sensors</span>
+        <span>Surface Cluster Alpha</span>
+      </div>
+
+      <div class="holo-panel p-4 cursor-pointer group" onclick="focusSurface(0)">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-mono text-accent">Surface 01</span>
+          <span class="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[9px] font-mono font-bold">LIVE SYNC</span>
+        </div>
+        <h3 class="font-title text-[15px] font-bold text-white group-hover:text-accent">Alkaline Hub Dynamic Studio</h3>
+        <p class="text-[12px] text-[#A8F0E7] mt-1 leading-snug">Universal Widgetry canvas with storefronts, auctions, and live podcasts.</p>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-[#9AA9A6] border-t border-[#1E2B29] pt-2">
+          <span>Seamless Connect</span>
+          <a href="mateflow-master-unified.html" onclick="event.stopPropagation()" class="text-accent font-bold no-underline">Open Studio →</a>
+        </div>
+      </div>
+
+      <div class="holo-panel p-4 cursor-pointer group" onclick="focusSurface(1)">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-mono text-accent">Surface 02</span>
+          <span class="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[9px] font-mono font-bold">435 1:1 VERIFIED</span>
+        </div>
+        <h3 class="font-title text-[15px] font-bold text-white group-hover:text-accent">eBay Commerce Pipeline</h3>
+        <p class="text-[12px] text-[#A8F0E7] mt-1 leading-snug">Order routing console, 5 7/8 x 8 labels, and verified 1:1 catalog publisher.</p>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-[#9AA9A6] border-t border-[#1E2B29] pt-2">
+          <span>Order #10-15401-90458</span>
+          <a href="https://cc.alkalinelabs.com" onclick="event.stopPropagation()" class="text-accent font-bold no-underline">Open Console →</a>
+        </div>
+      </div>
+
+      <div class="holo-panel p-4 cursor-pointer group" onclick="focusSurface(2)">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-mono text-accent">Surface 03</span>
+          <span class="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[9px] font-mono font-bold">KERNEL v2.4</span>
+        </div>
+        <h3 class="font-title text-[15px] font-bold text-white group-hover:text-accent">Pipeline Execution Engine</h3>
+        <p class="text-[12px] text-[#A8F0E7] mt-1 leading-snug">Extractors, 300s self-healing daemon, and Kernel Cyra 4-Module Core.</p>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-[#9AA9A6] border-t border-[#1E2B29] pt-2">
+          <span>Port :4433 Active</span>
+          <a href="https://dashboard.alkalinelabs.com" onclick="event.stopPropagation()" class="text-accent font-bold no-underline">Open Dashboard →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Spatial Interactive Focus Sphere -->
+    <div class="text-center max-w-lg pointer-events-none order-1 lg:order-2 my-6 lg:my-0">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full holo-panel mb-4 pointer-events-auto shadow-2xl">
+        <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+        <span class="text-[12px] font-mono font-semibold text-white">Interactive 3.5D Spatial Universe</span>
+      </div>
+      <h1 class="font-headline text-[34px] md:text-[48px] font-bold text-white leading-tight tracking-tight mb-2 neon-text-glow">
+        The Spatial Web
+      </h1>
+      <p class="text-[14px] md:text-[15px] text-[#C5D3D0] max-w-md mx-auto pointer-events-auto leading-relaxed mb-6">
+        No more static flat pages. Drag your mouse or finger anywhere across the spatial grid to orbit around the 13 live interconnected surfaces in 3D WebGL space.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3 pointer-events-auto">
+        <button type="button" onclick="orbitReset()" class="px-5 py-2.5 bg-gradient-to-r from-[#1D6A63] to-accent text-black font-bold text-[12px] rounded-xl shadow-lg shadow-accent/40 active:scale-95 transition-transform flex items-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">center_focus_strong</span>
+          <span>Center Galaxy</span>
+        </button>
+        <button type="button" onclick="togglePulse()" class="px-5 py-2.5 holo-panel text-white font-semibold text-[12px] rounded-xl hover:text-accent transition-colors flex items-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">waves</span>
+          <span>Pulse Waves</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Hologram Surface Cluster (Surfaces 10 - 13) -->
+    <div class="w-full lg:w-80 space-y-3.5 pointer-events-auto order-3">
+      <div class="text-[11px] font-mono uppercase tracking-widest text-accent font-bold px-2 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[14px]">public</span>
+        <span>Surface Cluster Beta</span>
+      </div>
+
+      <div class="holo-panel p-4 cursor-pointer group" onclick="focusSurface(3)">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-mono text-accent">Surface 10</span>
+          <span class="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[9px] font-mono font-bold">38 LESSONS</span>
+        </div>
+        <h3 class="font-title text-[15px] font-bold text-white group-hover:text-accent">Live Cohort Classrooms</h3>
+        <p class="text-[12px] text-[#A8F0E7] mt-1 leading-snug">Side-by-side lessons with real-time peer discussion and accountability.</p>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-[#9AA9A6] border-t border-[#1E2B29] pt-2">
+          <span>99.8% Completion</span>
+          <a href="mateflow-master-blueprint-145.html" onclick="event.stopPropagation()" class="text-accent font-bold no-underline">145 Blueprint →</a>
+        </div>
+      </div>
+
+      <div class="holo-panel p-4 cursor-pointer group" onclick="focusSurface(4)">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-mono text-accent">Surface 11</span>
+          <span class="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[9px] font-mono font-bold">5 STRIPE TIERS</span>
+        </div>
+        <h3 class="font-title text-[15px] font-bold text-white group-hover:text-accent">Paid Memberships Vault</h3>
+        <p class="text-[12px] text-[#A8F0E7] mt-1 leading-snug">Live Stripe checkout sessions (`cs_test_`) and server-gated VIP spaces.</p>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-[#9AA9A6] border-t border-[#1E2B29] pt-2">
+          <span>Direct Payouts</span>
+          <a href="https://alkalinelabs.com/signup" onclick="event.stopPropagation()" class="text-accent font-bold no-underline">Sign Up →</a>
+        </div>
+      </div>
+
+      <div class="holo-panel p-4 cursor-pointer group" onclick="focusSurface(5)">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-mono text-accent">Surface 12 · 13</span>
+          <span class="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[9px] font-mono font-bold">AI NATIVE</span>
+        </div>
+        <h3 class="font-title text-[15px] font-bold text-white group-hover:text-accent">AI Telemetry &amp; Builders Guild</h3>
+        <p class="text-[12px] text-[#A8F0E7] mt-1 leading-snug">Real-time room speech transcriber and the live flagship builder community.</p>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-[#9AA9A6] border-t border-[#1E2B29] pt-2">
+          <span>Autonomous Guard</span>
+          <a href="https://alkalinelabs.com/community/" onclick="event.stopPropagation()" class="text-accent font-bold no-underline">Community →</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Spatial World Controller Dock -->
+  <footer class="relative z-30 px-4 md:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3 pointer-events-auto border-t border-[#00C49F]/20 bg-[#030706]/85 backdrop-blur-xl">
+    <div class="flex flex-wrap items-center gap-3 md:gap-6 text-[11px] md:text-[12px] font-mono text-[#9AA9A6]">
+      <span class="flex items-center gap-1.5 text-white">
+        <span class="material-symbols-outlined text-[16px] text-accent">drag_pan</span>
+        Drag to Rotate Spatial World
+      </span>
+      <span class="hidden sm:inline">|</span>
+      <span class="hidden sm:inline">Scroll to Zoom</span>
+      <span>|</span>
+      <span>Active Nodes: 13 Holograms</span>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-1">
+      <span class="text-[10px] font-mono text-accent mr-1 uppercase font-bold">13 Surfaces:</span>
+      <script>
+        for(var sIdx=0;sIdx<13;sIdx++){
+          document.write('<button onclick="focusSurface('+sIdx+')" class="w-6 h-6 rounded '+(sIdx===12?'bg-accent text-black font-bold':'bg-[#121A19] text-white border border-accent/40')+' text-[11px] font-mono hover:bg-accent hover:text-black cursor-pointer">'+(sIdx+1)+'</button>');
+        }
+      </script>
+    </div>
+  </footer>
+
+  <script>
+    let scene, camera, renderer, surfacesGroup, nodes = [];
+    let isDragging = false, prevMouseX = 0, prevMouseY = 0;
+    let targetRotationX = 0.2, targetRotationY = 0;
+    let targetCamZ = 24, targetCamY = 2, targetCamX = 0;
+    let pulseActive = true;
+    let raycaster, mouse;
+    let hoveredNode = null;
+    let audioCtx = null;
+
+    function playSpatialChime(freq = 440, type = 'sine') {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch(e) {}
+    }
+
+    function initWebGL() {
+      const canvas = document.getElementById('webgl-canvas');
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x030706, 0.022);
+      camera = new THREE.PerspectiveCamera(65, width / height, 0.1, 1000);
+      camera.position.set(0, 2, 24);
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      scene.add(new THREE.AmbientLight(0x0F766E, 1.4));
+      const centerLight = new THREE.PointLight(0x00FFD1, 4, 60);
+      centerLight.position.set(0, 0, 6);
+      scene.add(centerLight);
+      const secondaryLight = new THREE.PointLight(0x1D6A63, 2.5, 45);
+      secondaryLight.position.set(-15, 10, -5);
+      scene.add(secondaryLight);
+
+      surfacesGroup = new THREE.Group();
+      scene.add(surfacesGroup);
+
+      const coreGeo = new THREE.IcosahedronGeometry(3.2, 2);
+      const coreMat = new THREE.MeshStandardMaterial({ color: 0x00C49F, wireframe: true, transparent: true, opacity: 0.85 });
+      surfacesGroup.add(new THREE.Mesh(coreGeo, coreMat));
+
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x00FFD1, transparent: true, opacity: 0.65 });
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(8.5, 0.06, 16, 120), ringMat);
+      ring.rotation.x = Math.PI / 2.3;
+      surfacesGroup.add(ring);
+
+      const ring2 = new THREE.Mesh(new THREE.TorusGeometry(12.5, 0.04, 16, 120), ringMat);
+      ring2.rotation.x = Math.PI / 1.7;
+      ring2.rotation.y = Math.PI / 4;
+      surfacesGroup.add(ring2);
+
+      const surfaceGeometry = new THREE.PlaneGeometry(3.6, 2.2);
+      for (let i = 0; i < 13; i++) {
+        const angle = (i / 13) * Math.PI * 2;
+        const radius = 9.2 + (i % 3) * 2.2;
+        const yOffset = Math.sin(i * 1.5) * 3.5;
+        const surfaceMat = new THREE.MeshStandardMaterial({ color: 0x091815, roughness: 0.2, metalness: 0.85, transparent: true, opacity: 0.88, side: THREE.DoubleSide });
+        const plane = new THREE.Mesh(surfaceGeometry, surfaceMat);
+        plane.position.set(Math.cos(angle) * radius, yOffset, Math.sin(angle) * radius);
+        plane.lookAt(0, yOffset * 0.3, 0);
+        plane.userData = { index: i, originalY: yOffset };
+        plane.add(new THREE.LineSegments(new THREE.EdgesGeometry(surfaceGeometry), new THREE.LineBasicMaterial({ color: 0x00FFD1, linewidth: 2 })));
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), new THREE.MeshBasicMaterial({ color: 0x00C49F }));
+        dot.position.set(0, 0, 0.25);
+        plane.add(dot);
+        nodes.push(plane);
+        surfacesGroup.add(plane);
+      }
+
+      const particleGeo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(1500);
+      for (let i = 0; i < 1500; i++) posArray[i] = (Math.random() - 0.5) * 75;
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      scene.add(new THREE.Points(particleGeo, new THREE.PointsMaterial({ size: 0.09, color: 0x00FFD1, transparent: true, opacity: 0.7 })));
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+      window.addEventListener('mousedown', (e) => { isDragging = true; prevMouseX = e.clientX; prevMouseY = e.clientY; });
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        if (!isDragging) return;
+        targetRotationY += (e.clientX - prevMouseX) * 0.005;
+        targetRotationX += (e.clientY - prevMouseY) * 0.005;
+        prevMouseX = e.clientX; prevMouseY = e.clientY;
+        const coords = document.getElementById('telemetry-coords');
+        if (coords) coords.textContent = `${targetRotationX.toFixed(2)}, ${targetRotationY.toFixed(2)}, ${camera.position.z.toFixed(1)}`;
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+      window.addEventListener('wheel', (e) => {
+        targetCamZ = Math.max(12, Math.min(36, targetCamZ + e.deltaY * 0.015));
+      }, { passive: true });
+      window.addEventListener('touchstart', (e) => { if(e.touches[0]){ isDragging=true; prevMouseX=e.touches[0].clientX; prevMouseY=e.touches[0].clientY; } }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if(!isDragging || !e.touches[0]) return;
+        targetRotationY += (e.touches[0].clientX - prevMouseX) * 0.005;
+        targetRotationX += (e.touches[0].clientY - prevMouseY) * 0.005;
+        prevMouseX = e.touches[0].clientX; prevMouseY = e.touches[0].clientY;
+      }, { passive: true });
+      window.addEventListener('touchend', () => { isDragging = false; }, { passive: true });
+
+      document.querySelectorAll('.holo-panel, button').forEach(el => {
+        el.addEventListener('mouseenter', () => playSpatialChime(520, 'sine'));
+      });
+      animate();
+    }
+
+    function orbitReset() { targetRotationX = 0.2; targetRotationY = 0; targetCamZ = 24; targetCamY = 2; targetCamX = 0; playSpatialChime(580, 'sine'); }
+    function togglePulse() { pulseActive = !pulseActive; playSpatialChime(pulseActive ? 720 : 360, 'triangle'); }
+    function focusSurface(index) {
+      const nIdx = index % nodes.length;
+      if (nodes[nIdx]) {
+        targetRotationY = -(nIdx / 13) * Math.PI * 2;
+        targetRotationX = 0.08;
+        targetCamZ = 16;
+        targetCamY = nodes[nIdx].userData.originalY * 0.4;
+        nodes.forEach((n, i) => n.scale.set(i === nIdx ? 1.25 : 1, i === nIdx ? 1.25 : 1, i === nIdx ? 1.25 : 1));
+        playSpatialChime(440 + nIdx * 35, 'sine');
+      }
+    }
+
+    let clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+      camera.position.z += (targetCamZ - camera.position.z) * 0.06;
+      camera.position.y += (targetCamY - camera.position.y) * 0.06;
+      camera.position.x += (targetCamX - camera.position.x) * 0.06;
+      surfacesGroup.rotation.y += (targetRotationY - surfacesGroup.rotation.y) * 0.08;
+      surfacesGroup.rotation.x += (targetRotationX - surfacesGroup.rotation.x) * 0.08;
+      if (!isDragging) targetRotationY += 0.0012;
+      if (pulseActive) {
+        nodes.forEach((node, i) => {
+          node.position.y = node.userData.originalY + Math.sin(elapsedTime * 2 + i * 0.8) * 0.35;
+        });
+      }
+      renderer.render(scene, camera);
+    }
+    window.onload = initWebGL;
+  </script>
+<script src="/cyra_runtime_enforcer.js"></script>
+<script src="/universal_verbal_ai.js"></script>
+
+<!-- VDD_LIVE_LOCK_SWITCH_START -->
+<div id="vdd-live-lock-bar" style="position:fixed;bottom:14px;right:14px;z-index:999999;background:#0f172a;color:#f8fafc;border:2px solid #22c55e;border-radius:10px;padding:10px 14px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,0.45);display:flex;align-items:center;gap:12px;">
+  <span style="font-weight:700;color:#4ade80;letter-spacing:0.4px;">● CATALOG LOCK:</span>
+  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;">
+    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-live" value="live" checked style="accent-color:#22c55e;cursor:pointer;">
+    <span>LIVE eBay (<span id="vdd-live-count-badge">1161</span> Locked)</span>
+  </label>
+  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;color:#94a3b8;">
+    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-auto" value="auto_lock" style="accent-color:#38bdf8;cursor:pointer;">
+    <span>Auto-Lock Sync</span>
+  </label>
+  <button id="vdd-force-reload-btn" style="background:#22c55e;color:#052e16;border:none;border-radius:6px;padding:4px 8px;font-weight:700;cursor:pointer;">Verify Live</button>
+</div>
+<script>
+(function(){
+  if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+  }
+  function enforceLiveCatalog(mode) {
+    localStorage.setItem('VDD_CATALOG_LOCK_MODE', mode || 'live');
+    var raw = window.VDD_LIVE_PRODUCTS || window.VDD_CATALOG || [];
+    var items = raw.filter(function(it){
+      var id = String((it && (it.id || it.itemId || it.sku)) || '');
+      return id.indexOf('STAGED-') !== 0;
+    });
+    window.VDD_CATALOG = items;
+    window.VDD_LIVE_PRODUCTS = items;
+    var badge = document.getElementById('vdd-live-count-badge');
+    if (badge && items.length) badge.textContent = String(items.length);
+    if (typeof window.renderProducts === 'function') window.renderProducts(items);
+    if (typeof window.renderCatalog === 'function') window.renderCatalog(items);
+    if (typeof window.loadCatalog === 'function') window.loadCatalog(items);
+    window.dispatchEvent(new CustomEvent('vdd:catalog-locked', { detail: { count: items.length, mode: mode } }));
+  }
+  document.addEventListener('change', function(e){
+    if (e.target && e.target.name === 'vdd_catalog_mode') {
+      enforceLiveCatalog(e.target.value);
+      var bar = document.getElementById('vdd-live-lock-bar');
+      if (bar) bar.style.borderColor = e.target.value === 'live' ? '#22c55e' : '#38bdf8';
+    }
+  });
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.id === 'vdd-force-reload-btn') {
+      var s = document.createElement('script');
+      s.src = '/vdd_live_products.js?t=' + Date.now();
+      s.onload = function(){
+        enforceLiveCatalog('live');
+        e.target.textContent = 'Locked (' + (window.VDD_CATALOG ? window.VDD_CATALOG.length : 0) + ') ✓';
+      };
+      document.head.appendChild(s);
+    }
+  });
+  window.addEventListener('DOMContentLoaded', function(){
+    var saved = localStorage.getItem('VDD_CATALOG_LOCK_MODE') || 'live';
+    var r = document.getElementById(saved === 'auto_lock' ? 'vdd-radio-auto' : 'vdd-radio-live');
+    if (r) r.checked = true;
+    enforceLiveCatalog(saved);
+    setTimeout(function(){ enforceLiveCatalog(saved); }, 700);
+  });
+})();
+</script>
+<!-- VDD_LIVE_LOCK_SWITCH_END -->
+</body></html>

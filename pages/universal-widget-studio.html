@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mateflowlabs — Universal Widget Studio.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Universal Widget Studio">
+<meta property="og:description" content="Mateflowlabs — Universal Widget Studio.">
+<meta property="og:url" content="https://mateflowlabs.com/universal-widget-studio.html">
+<meta property="og:site_name" content="Mateflowlabs">
+<title>Alkaline Hub — Universal Widget Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body{font-family:ui-sans-serif,system-ui,sans-serif}
+  .widget-block{border:2px solid transparent;cursor:pointer;transition:border-color .15s}
+  .widget-block:hover{border-color:#c7d2fe}
+  .widget-block.selected{border-color:#4f46e5}
+  .pulse-ring{animation:pulseRing 1.2s ease-in-out 3}
+  @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(79,70,229,.5)}70%{box-shadow:0 0 0 12px rgba(79,70,229,0)}100%{box-shadow:0 0 0 0 rgba(79,70,229,0)}}
+  .drawer{transition:transform .25s ease}
+  .faq-a{display:none}.faq-item.open .faq-a{display:block}
+  .synth-cursor{animation:synthMove 6s ease-in-out infinite}
+  @keyframes synthMove{0%{left:8%;top:30%}25%{left:55%;top:22%}50%{left:70%;top:60%}75%{left:30%;top:70%}100%{left:8%;top:30%}}
+</style>
+<style id="no-lift-protocol">
+*{user-select:none!important;-webkit-user-select:none!important;-webkit-touch-callout:none!important;}
+img,svg,video{-webkit-user-drag:none!important;user-drag:none!important;pointer-events:none!important;}
+@media print{html,body{display:none!important;}}
+</style>
+<script id="no-lift-enforcer">
+(function(){
+  var block=function(e){e.preventDefault();e.stopPropagation();return false;};
+  ['copy','cut','paste','contextmenu','dragstart','drop','selectstart'].forEach(function(ev){
+    document.addEventListener(ev,block,true);
+  });
+  document.addEventListener('keydown',function(e){
+    var k=(e.key||'').toLowerCase();
+    if((e.ctrlKey||e.metaKey)&&['c','x','v','s','p','u','a'].indexOf(k)!==-1){return block(e);}
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].indexOf(k)!==-1)){return block(e);}
+  },true);
+})();
+</script>
+
+<style id="argon4-spatial-35d-css">
+  :root {
+    --mx: 50%;
+    --my: 50%;
+    --persp: 1400px;
+  }
+  html, body {
+    background-color: #030509 !important;
+    color: #f1f5f9 !important;
+    overflow-x: hidden;
+    perspective: var(--persp);
+  }
+  /* WebGL Sub-Surface Micro-Shader Canvas */
+  #argon4-webgl-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.92;
+  }
+  /* Micro-Grain Matte Instrumentation Overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: radial-gradient(circle at var(--mx) var(--my), rgba(16, 185, 129, 0.09) 0%, rgba(99, 102, 241, 0.05) 28%, transparent 65%),
+                      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 2px);
+  }
+  header, main, section, nav, aside, footer, #view-wizard, #view-signup, #view-checkout, #view-vc {
+    position: relative;
+    z-index: 10;
+    transform-style: preserve-3d;
+  }
+  /* 3.5D Spatial Orthographic Instrumentation Panels */
+  section, .card-surface, .feature-card, .card, .panel-card, .rounded-2xl, .rounded-3xl, .p-3, .p-4 {
+    background: linear-gradient(165deg, rgba(19, 26, 46, 0.88) 0%, rgba(8, 12, 24, 0.94) 100%) !important;
+    border: 1px solid rgba(148, 163, 184, 0.16) !important;
+    box-shadow:
+      0 22px 48px -12px rgba(0, 0, 0, 0.85),
+      0 6px 16px -4px rgba(0, 0, 0, 0.65),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 0 rgba(16, 185, 129, 0.15) !important;
+    backdrop-filter: blur(18px) saturate(150%);
+    transform-style: preserve-3d;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease !important;
+    will-change: transform, box-shadow;
+  }
+  /* Active Hover Z-Axis Elevation (3.5D Spatial Hover) */
+  .spatial-card:hover, .feature-card:hover, .card:hover, .rounded-2xl:hover {
+    border-color: rgba(16, 185, 129, 0.65) !important;
+    box-shadow:
+      0 36px 70px -10px rgba(0, 0, 0, 0.95),
+      0 0 28px 0 rgba(16, 185, 129, 0.25),
+      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.42),
+      inset 0 -2px 0 0 rgba(16, 185, 129, 0.45) !important;
+  }
+  /* Tactile Beveled Buttons */
+  button, a.px-2\.5, a.px-3 {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.28) !important;
+    transform: translateZ(14px);
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  }
+  button:hover {
+    transform: translateZ(24px) translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 12px 26px rgba(16, 185, 129, 0.32), inset 0 1.5px 0 rgba(255,255,255,0.45) !important;
+  }
+  button:active {
+    transform: translateZ(6px) translateY(1px) !important;
+  }
+  /* Full 3.5D Orthographic Command Plane Toggle Mode */
+  body.orthographic-35d-mode main,
+  body.orthographic-35d-mode #view-wizard {
+    transform: perspective(1500px) rotateX(11deg) rotateY(-4deg) scale(0.96);
+    transform-origin: center top;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  body.orthographic-35d-mode .rounded-2xl,
+  body.orthographic-35d-mode .feature-card {
+    transform: translateZ(34px);
+    box-shadow:
+      -14px 28px 50px rgba(0, 0, 0, 0.92),
+      0 0 24px rgba(99, 102, 241, 0.25),
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.35) !important;
+  }
+</style>
+
+<script id="argon4-webgl-spatial-engine">
+(function(){
+  function bootSpatialWebGL(){
+    if(document.getElementById('argon4-webgl-canvas')) return;
+    var canvas = document.createElement('canvas');
+    canvas.id = 'argon4-webgl-canvas';
+    document.body.prepend(canvas);
+
+    // Floating 3.5D Orthographic Matrix Toggle Pill
+    var toggleBtn = document.createElement('button');
+    toggleBtn.innerHTML = '📐 3.5D Spatial Matrix: ON';
+    toggleBtn.style.cssText = 'position:fixed;bottom:16px;left:16px;z-index:9999;background:linear-gradient(135deg,#10b981,#4f46e5);color:#04060c;font-weight:900;font-size:11px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.4);cursor:pointer;font-family:monospace;letter-spacing:0.04em;';
+    toggleBtn.onclick = function(){
+      document.body.classList.toggle('orthographic-35d-mode');
+      var isIso = document.body.classList.contains('orthographic-35d-mode');
+      toggleBtn.innerHTML = isIso ? '📐 3.5D Orthographic Plane: LOCKED' : '📐 3.5D Spatial Matrix: INTERACTIVE';
+    };
+    document.body.appendChild(toggleBtn);
+
+    // 1. Initialize Real GPU WebGL Micro-Shader (Matte Instrumentation Grain + Dynamic Cursor Specular Light)
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    var mx = 0.5, my = 0.5;
+    window.addEventListener('mousemove', function(e){
+      mx = e.clientX / window.innerWidth;
+      my = 1.0 - (e.clientY / window.innerHeight);
+      document.documentElement.style.setProperty('--mx', (e.clientX) + 'px');
+      document.documentElement.style.setProperty('--my', (e.clientY) + 'px');
+    });
+
+    if(gl){
+      var vsSource = 'attribute vec2 a_pos; void main(){ gl_Position = vec4(a_pos, 0.0, 1.0); }';
+      var fsSource = 'precision highp float; uniform vec2 u_res; uniform vec2 u_mouse; uniform float u_time;' +
+        'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }' +
+        'void main(){' +
+        '  vec2 uv = gl_FragCoord.xy / u_res;' +
+        '  vec2 d = uv - u_mouse;' +
+        '  d.x *= u_res.x / u_res.y;' +
+        '  float dist = length(d);' +
+        '  float spec = exp(-dist * 3.8) * 0.22;' +
+        '  float rim = exp(-abs(dist - 0.28) * 18.0) * 0.06;' +
+        '  float grain = (hash(gl_FragCoord.xy + fract(u_time)) - 0.5) * 0.032;' +
+        '  vec3 base = vec3(0.015, 0.024, 0.048);' +
+        '  vec3 lightCol = mix(vec3(0.06, 0.72, 0.50), vec3(0.38, 0.40, 0.95), uv.x);' +
+        '  vec3 col = base + lightCol * (spec + rim) + vec3(grain);' +
+        '  gl_FragColor = vec4(col, 1.0);' +
+        '}';
+      var compile = function(type, src){
+        var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s;
+      };
+      var prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, vsSource));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fsSource));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      var buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+      var aPos = gl.getAttribLocation(prog, 'a_pos');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      var uRes = gl.getUniformLocation(prog, 'u_res');
+      var uMouse = gl.getUniformLocation(prog, 'u_mouse');
+      var uTime = gl.getUniformLocation(prog, 'u_time');
+
+      var resize = function(){
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      };
+      window.addEventListener('resize', resize);
+      resize();
+
+      var start = performance.now();
+      var render = function(now){
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform2f(uMouse, mx, my);
+        gl.uniform1f(uTime, (now - start) * 0.001);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        requestAnimationFrame(render);
+      };
+      requestAnimationFrame(render);
+    }
+
+    // 2. Attach 3.5D Spatial Perspective Tilt + Z-Axis Hover to Panels & Cards
+    document.addEventListener('mousemove', function(e){
+      var el = e.target.closest ? e.target.closest('.rounded-2xl, .rounded-3xl, .feature-card, .card') : null;
+      if(!el) return;
+      var rect = el.getBoundingClientRect();
+      if(rect.width > 900) return; // Keep full-screen containers steady; tilt individual panels/cards
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = 'perspective(1100px) rotateX(' + (-y * 7.5).toFixed(2) + 'deg) rotateY(' + (x * 7.5).toFixed(2) + 'deg) translateZ(22px)';
+      el.onmouseleave = function(){
+        el.style.transform = '';
+      };
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bootSpatialWebGL);
+  } else {
+    bootSpatialWebGL();
+  }
+})();
+</script>
+
+<style id="uws-dark-contrast">
+	header, section, [class*="bg-white"], [class*="-50"], [class*="-100"] { background-color: #111827 !important; color: #f8fafc !important; border-color: #334155 !important; }
+	button[class*="bg-white"], button[class*="-50"], button[class*="-100"], aside button { background-color: #1e293b !important; color: #f8fafc !important; border: 1px solid #475569 !important; }
+	button[class*="bg-white"]:hover, button[class*="-50"]:hover, aside button:hover { background-color: #334155 !important; }
+	input, select, textarea { background-color: #090d16 !important; color: #f8fafc !important; border: 1px solid #475569 !important; }
+	</style></head>
+<body class="bg-slate-950 text-white">
+<div style='background:#06070f;border-bottom:1px solid #232742;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:Inter,sans-serif;font-size:12px;z-index:9999;position:relative;'><div style='display:flex;align-items:center;gap:8px;color:#fff;font-weight:800;'><span style='background:linear-gradient(135deg,#6366f1,#10b981);padding:3px 8px;border-radius:6px;'>ALKALINE OS</span><span style='color:#94a3b8;font-weight:500;'>Beyond-Shopify Polymorphic Commerce Suite</span></div><div style='display:flex;align-items:center;gap:6px;flex-wrap:wrap;'><a href='mateflow-master-unified.html' style='padding:5px 10px;border-radius:6px;background:#4f46e5;color:#fff;text-decoration:none;font-weight:700;'>1. Master Unified Builder + 1:1 Scraper + Dual AI</a><a href='universal-widget-studio.html' style='padding:5px 10px;border-radius:6px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-weight:600;'>2. Universal Widget Studio</a><a href='Storefront_Demo.html' style='padding:5px 10px;border-radius:6px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-weight:600;'>3. 6-Model Live Storefront</a><a href='mateflow-master-blueprint-145.html' style='padding:5px 10px;border-radius:6px;background:#e11d48;color:#fff;text-decoration:none;font-weight:700;'>4. 145-Feature Blueprint & Whop $5.1B OS</a></div></div>
+
+
+<!-- Seamless Connect SSO strip -->
+<div class="bg-slate-900 text-white text-sm px-4 py-2 flex flex-wrap items-center gap-3">
+  <span class="font-semibold">⬢ Alkaline Seamless Connect</span>
+  <span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full text-xs">🔐 Scoped OIDC / JWT Bridge (Pre-Launch)</span>
+  <nav class="flex gap-2 ml-auto">
+    <a href="https://cc.mateflowlabs.com" class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">📦 Ebay Pipeline</a>
+    <a href="https://dashboard.mateflowlabs.com" class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">🖥️ Alkaline Pipeline</a>
+    <span class="px-3 py-1 rounded bg-slate-950 border border-indigo-500/40 text-white0 font-medium">🎨 Alkaline Hub &amp; Builder</span>
+  </nav>
+</div>
+
+<!-- Studio top bar -->
+<header class="bg-slate-950 border-b border-slate-800 text-white px-4 py-3 flex flex-wrap items-center gap-3 sticky top-0 z-30">
+  <div>
+    <div class="font-bold text-lg leading-tight">Universal Dynamic Widgetry Studio</div>
+    <div class="text-xs text-slate-300">Products · Services · Live Auctions · Podcasts · Everything under the sun — one polymorphic schema</div>
+  </div>
+  <select id="sandboxSel" class="bg-slate-950 text-white border border-slate-700 rounded px-2 py-1.5 text-sm ml-2">
+    <option>Sandbox 01 — Vida Coworking</option><option>Sandbox 02 — DaVinci Virtual</option>
+    <option>Sandbox 03 — Carr Workplaces</option><option>Sandbox 04 — Savvy Nomad</option>
+    <option>Sandbox 05 — PO Box Zone</option>
+  </select>
+  <div class="flex flex-wrap gap-2 ml-auto">
+    <button onclick="toggleCart()" class="px-3 py-1.5 rounded bg-slate-900 text-white text-sm">🧺 Unified Wallet (<span id="walletCount">0</span>)</button>
+    <button onclick="showSchema()" class="px-3 py-1.5 rounded bg-indigo-600 text-white text-sm">Universal JSON-LD &amp; RSS</button>
+    <button onclick="exportStateJSON()" class="px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-white text-sm font-bold">Save Schema</button>
+    <label class="px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-white text-sm font-bold cursor-pointer">Import Schema<input type="file" accept=".json" class="hidden" onchange="importStateJSON(event)"></label>
+    <button onclick="publishStandaloneHTML()" class="px-3 py-1.5 rounded bg-emerald-600 text-white text-sm">Publish Storefront ➔</button>
+  </div>
+</header>
+
+<div class="flex flex-col lg:flex-row gap-4 p-4 max-w-[1600px] mx-auto">
+
+  <!-- Left rail: widget palette + pipeline feed -->
+  <aside class="lg:w-64 shrink-0 space-y-4">
+    <div class="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-sm p-3">
+      <div class="font-semibold text-sm mb-2">➕ Drop a widget</div>
+      <div class="grid grid-cols-1 gap-2 text-sm">
+        <button onclick="addWidget('auction')" class="text-left px-3 py-2 rounded bg-slate-950 hover:bg-slate-800 text-white border border-rose-500/50 font-bold">🔨 Live Auctions</button>
+        <button onclick="addWidget('podcast')" class="text-left px-3 py-2 rounded bg-slate-950 hover:bg-slate-800 text-white border border-violet-500/50 font-bold">🎧 Podcast Hub</button>
+        <button onclick="addWidget('service')" class="text-left px-3 py-2 rounded bg-slate-950 hover:bg-slate-800 text-white border border-sky-500/50 font-bold">🛠️ Service Booking</button>
+        <button onclick="addWidget('retail')" class="text-left px-3 py-2 rounded bg-slate-950 hover:bg-slate-800 text-white border border-emerald-500/50 font-bold">🛒 Retail Grid</button>
+        <button onclick="addWidget('bento')" class="text-left px-3 py-2 rounded bg-slate-950 hover:bg-slate-800 text-white border border-amber-500/50 font-bold">🍱 Universal Bento</button>
+        <button onclick="addWidget('faq')" class="text-left px-3 py-2 rounded bg-slate-950 hover:bg-slate-800 text-white border border-teal-500/50 font-bold">❓ FAQ Hub</button>
+        <button onclick="addWidget('video')" class="text-left px-3 py-2 rounded bg-slate-950 hover:bg-slate-800 text-white border border-indigo-500/50 font-bold">🎬 Video Masterclass</button>
+      </div>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-sm p-3">
+      <div class="font-semibold text-sm">⚡ Push to Hub — Ebay Pipeline feed</div>
+      <div id="feedStatus" class="text-xs text-slate-300 mt-1">Loading live inventory…</div>
+      <div id="feedTray" class="mt-2 space-y-2 max-h-96 overflow-auto"></div>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-sm p-3">
+      <div class="font-semibold text-sm mb-2">🎨 Theme</div>
+      <label class="text-xs text-slate-300">Site name</label>
+      <input id="themeName" class="bg-slate-950 text-white border border-slate-700 rounded w-full px-2 py-1 text-sm mb-2" oninput="siteState.theme.siteName=this.value;save();renderCanvas()">
+      <label class="text-xs text-slate-300">Brand color</label>
+      <input id="themeColor" type="color" class="w-full h-8 cursor-pointer" oninput="siteState.theme.primary=this.value;save();renderCanvas()">
+    </div>
+  </aside>
+
+  <!-- Center canvas -->
+  <main class="flex-1 min-w-0">
+    <div class="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-sm p-3 mb-3 flex items-center gap-2 text-sm">
+      <span class="font-semibold">Canvas</span>
+      <span class="text-slate-300">— click any widget to edit it in the Inspector</span>
+      <span id="saveState" class="ml-auto text-xs text-slate-300">Auto-save on</span>
+    </div>
+    <div id="siteViewport" class="space-y-4"></div>
+  </main>
+
+  <!-- Right inspector -->
+  <aside class="lg:w-80 shrink-0">
+    <div class="bg-slate-900 border border-slate-800 text-white rounded-xl shadow-sm p-3 sticky top-24">
+      <div class="font-semibold text-sm mb-1">🔍 Inspector</div>
+      <div id="inspector" class="text-sm text-slate-200">Select a widget on the canvas.</div>
+    </div>
+  </aside>
+</div>
+
+<!-- Omni-cart drawer -->
+<div id="cartDrawer" class="drawer fixed top-0 right-0 h-full w-full sm:w-96 bg-slate-900 border-l border-slate-800 text-white shadow-2xl z-50 translate-x-full flex flex-col">
+  <div class="p-4 border-b flex items-center"><span class="font-bold">🧺 Unified Omni-Cart</span><button class="ml-auto text-xl" onclick="toggleCart()">×</button></div>
+  <div class="p-4 text-xs text-slate-300 border-b">Immediate captures (retail, service deposits) and conditional holds (auction escrow, pledges) — one checkout.</div>
+  <div id="cartItems" class="p-4 space-y-2 flex-1 overflow-auto text-sm"></div>
+  <div class="p-4 border-t"><div class="flex justify-between font-semibold"><span>Subtotal due now</span><span id="cartTotal">$0.00</span></div>
+  <div class="flex justify-between text-sm text-slate-300"><span>Held in escrow</span><span id="cartEscrow">$0.00</span></div>
+  <button class="mt-3 w-full py-2 rounded bg-slate-900 text-white" onclick="alert('Demo checkout — unified wallet flow lands with the payment gateway.')">Checkout</button></div>
+</div>
+
+<!-- Sticky podcast deck -->
+<div id="audioDeck" class="fixed bottom-0 left-0 right-0 bg-slate-900 text-white z-40 hidden">
+  <div class="max-w-[1600px] mx-auto px-4 py-2 flex items-center gap-3 text-sm">
+    <button id="deckPlayBtn" class="w-9 h-9 rounded-full bg-slate-950 border border-indigo-500/40 text-white0 text-white" onclick="toggleDeck()">⏸</button>
+    <div class="min-w-0"><div id="deckTitle" class="font-medium truncate">Episode</div><div class="h-1.5 bg-white/20 rounded mt-1 w-56 sm:w-96"><div id="deckBar" class="h-full bg-indigo-400 rounded" style="width:0%"></div></div></div>
+    <span id="deckTime" class="text-xs text-slate-300">0:00</span>
+    <button id="deckBuy" class="ml-auto px-3 py-1.5 rounded bg-emerald-500 text-white text-xs hidden" onclick="deckBuyFeatured()">Buy Featured Lot</button>
+    <button class="text-lg" onclick="closeDeck()">×</button>
+  </div>
+</div>
+
+<!-- AI Co-Pilot -->
+<button onclick="toggleCopilot()" class="fixed bottom-20 right-4 z-50 px-4 py-2.5 rounded-full bg-indigo-600 text-white shadow-lg text-sm">✨ AI Co-Pilot — Ask &amp; Learn</button>
+<div id="copilot" class="fixed bottom-36 right-4 z-50 w-[92vw] sm:w-96 bg-slate-900 border border-slate-800 text-white rounded-xl shadow-2xl border hidden">
+  <div class="p-3 border-b flex items-center"><span class="font-semibold text-sm">✨ Ask &amp; Learn</span><button class="ml-auto" onclick="toggleCopilot()">×</button></div>
+  <div id="copilotBody" class="p-3 space-y-2 text-sm max-h-80 overflow-auto"></div>
+  <div class="p-3 border-t flex gap-2"><input id="copilotInput" class="bg-slate-950 text-white border border-slate-700 rounded flex-1 px-2 py-1.5 text-sm" placeholder="Ask, or describe a widget to build…"><button class="px-3 py-1.5 rounded bg-indigo-600 text-white text-sm" onclick="copilotAsk()">Ask</button></div>
+</div>
+
+<!-- Schema modal -->
+<div id="schemaModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+  <div class="bg-slate-900 border border-slate-800 text-white rounded-xl max-w-3xl w-full max-h-[85vh] flex flex-col">
+    <div class="p-4 border-b flex items-center"><span class="font-bold">Universal Schema — JSON-LD @graph + Podcast RSS</span><button class="ml-auto text-xl" onclick="hideSchema()">×</button></div>
+    <div class="p-4 overflow-auto space-y-3">
+      <div class="flex gap-2"><button class="px-3 py-1.5 rounded bg-slate-900 text-white text-sm" onclick="downloadRSS()">Download RSS feed</button></div>
+      <pre id="schemaOut" class="bg-slate-900 text-emerald-200 text-xs rounded-lg p-3 overflow-auto"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+let uid = 1; const nid = p => p + '-' + (uid++) + '-' + Date.now().toString(36);
+let selectedId = null, feedItems = [];
+
+let siteState = {
+  theme: { siteName: 'Alkaline Hub Storefront', primary: '#4f46e5' },
+  widgets: []
+};
+
+function seed() {
+  const now = Date.now();
+  siteState.widgets = [
+    { id: nid('w'), type:'auction', title:'Live Auction Floor', items:[
+      { id:nid('lot'), title:'Vintage 1979 Gibson Les Paul Custom Silverburst', subtitle:'Verified Serial • LIVE EBAY SYNC', currentBid:3850, buyNow:4900, bids:0, increment:50, endsAt: now + (1*3600+42*60+19)*1000 },
+      { id:nid('lot'), title:'Industrial Air Compressor — 30 Gallon', subtitle:'Yard-tested • Local pickup', currentBid:210, buyNow:340, bids:3, increment:10, endsAt: now + (26*60+5)*1000 }
+    ]},
+    { id: nid('w'), type:'podcast', title:'Podcast Hub', show:'The Builder\'s Frequency', items:[
+      { id:nid('ep'), title:'Ep. 12 — Everything Under the Sun', duration: 754, notes:'Dynamic widgetry, auctions, and the unified wallet.', featured:null },
+      { id:nid('ep'), title:'Ep. 11 — Push to Hub, Live', duration: 623, notes:'Watch an eBay lot become a storefront auction in one click.', featured:null }
+    ]},
+    { id: nid('w'), type:'service', title:'Book a Service', items:[
+      { id:nid('svc'), title:'Emergency Locksmith — 24/7', rate:95, rateType:'flat', deposit:25, slots:['Today 4:00 PM','Today 6:30 PM','Tomorrow 9:00 AM'] },
+      { id:nid('svc'), title:'Equipment Tune-Up', rate:60, rateType:'hourly', deposit:20, slots:['Tomorrow 10:00 AM','Tomorrow 1:00 PM'] }
+    ]},
+    { id: nid('w'), type:'retail', title:'Retail Grid', items:[
+      { id:nid('sku'), title:'Heavy-Duty Shelf Brackets (4-pack)', sku:'INV-531021', price:24.99 },
+      { id:nid('sku'), title:'LED Shop Light — 4ft Linkable', sku:'INV-496439', price:39.50 }
+    ]},
+    { id: nid('w'), type:'bento', title:'Universal Bento', items:[
+      { id:nid('b'), title:'48ft Dry Van Trailer — Weekly Rental', kind:'Rental', price:450, priceNote:'/week', badges:['Available','Yard C1'], specs:[['Length','48 ft'],['Doors','Roll-up'],['Deposit','$500']] },
+      { id:nid('b'), title:'Community Tool Library — Founding Pledge', kind:'Crowdfunding', price:50, priceNote:'pledge', badges:['Goal $5,000','37 backers'], specs:[['Tier','Founder'],['Perk','Lifetime borrowing']] }
+    ]},
+    { id: nid('w'), type:'faq', title:'FAQ & Knowledge Hub', items:[
+      { id:nid('q'), cat:'Architecture & JSON', q:'How can an Auction, a Podcast, and a Plumber Booking exist in the same widget list?', a:'Every block uses the Universal Polymorphic Item Schema. The core wrapper stays identical while the meta payload morphs keys (currentBid vs hourlyRate vs audioDuration) based on the widget archetype.' },
+      { id:nid('q'), cat:'Auctions & Escrow', q:'What happens when a customer buys a fixed-price SKU AND bids on an auction lot at the same time?', a:'The Unified Omni-Cart separates immediate captures (retail SKUs, service deposits) from conditional holds (auction escrow, crowdfunding pledges) inside a single checkout drawer.' },
+      { id:nid('q'), cat:'Architecture & JSON', q:'How do I invent a brand new business model without writing code?', a:'Add a Universal Bento widget, set your own badges, and use the Key : Value spec builder to render structured data pills for any industry.' },
+      { id:nid('q'), cat:'Architecture & JSON', q:'Is my layout locked into a vendor database?', a:'Never. Save Schema exports your entire storefront — theme tokens, widgets, inventory — into a portable JSON file you own.' },
+      { id:nid('q'), cat:'Services & Booking', q:'How do service deposits work?', a:'Booking a slot adds the deposit as an immediate capture in the Omni-Cart; the balance is invoiced on completion.' },
+      { id:nid('q'), cat:'Audio & Media', q:'Does the podcast player keep playing while visitors shop?', a:'Yes. Playing an episode docks the sticky audio deck to the bottom of the viewport; it stays alive while visitors browse products or bid on auctions — and can carry a Buy Featured Lot button.' }
+    ]},
+    { id: nid('w'), type:'video', title:'Video Masterclass', items:[
+      { id:nid('ch'), t:'00:00', title:'The Polymorphic Paradigm', desc:'Why 1 JSON schema beats 6 SaaS plugins.', target:'retail' },
+      { id:nid('ch'), t:'02:15', title:'Live Auctions & Popcorn Bidding', desc:'Real-time clocks and escrow holds.', target:'auction' },
+      { id:nid('ch'), t:'05:40', title:'Service Dispatch & SLA Routing', desc:'Emergency vs scheduled calendar slots.', target:'service' },
+      { id:nid('ch'), t:'08:20', title:'Shoppable Media', desc:'Sync podcast timecodes to live SKU inventory.', target:'podcast' },
+      { id:nid('ch'), t:'11:50', title:'The Universal Bento Architect', desc:'Custom domain cards with Key : Value pills.', target:'bento' },
+      { id:nid('ch'), t:'15:00', title:'Exporting & Deploying', desc:'Take dynamic-widget-schema.json to production.', target:'faq' }
+    ]}
+  ];
+}
+
+function save(){ try{ localStorage.setItem('uws_state_v1', JSON.stringify(siteState)); $('#saveState').textContent = 'Auto-saved ' + new Date().toLocaleTimeString(); }catch(e){} }
+function load(){ try{ const raw = localStorage.getItem('uws_state_v1'); if(raw){ siteState = JSON.parse(raw); return true; } }catch(e){} return false; }
+let cart = []; try{ cart = JSON.parse(localStorage.getItem('uws_cart_v1')||'[]'); }catch(e){}
+function saveCart(){ try{ localStorage.setItem('uws_cart_v1', JSON.stringify(cart)); }catch(e){} renderWallet(); }
+function money(n){ return '$' + Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}); }
+function esc(s){ return String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function findWidget(id){ return siteState.widgets.find(w => w.id === id); }
+
+function fmtLeft(ms){ if(ms<0) ms=0; const s=Math.floor(ms/1000); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), ss=s%60; return String(h).padStart(2,'0')+'h '+String(m).padStart(2,'0')+'m '+String(ss).padStart(2,'0')+'s'; }
+
+/* ---------- Canvas rendering ---------- */
+function renderAll(){ renderCanvas(); renderInspector(); renderWallet(); $('#themeName').value = siteState.theme.siteName; $('#themeColor').value = siteState.theme.primary; }
+function renderCanvas(){
+  const vp = $('#siteViewport');
+  vp.innerHTML = siteState.widgets.map(w => renderWidget(w)).join('');
+}
+function blockShell(w, inner){
+  return `<section data-wid="${w.id}" onclick="selectWidget('${w.id}')" class="widget-block ${selectedId===w.id?'selected':''} bg-slate-900 border border-slate-800 text-white rounded-xl shadow-sm p-4" style="border-top:4px solid ${siteState.theme.primary}">
+    <div class="flex items-center gap-2 mb-3"><h3 class="font-bold">${esc(w.title)}</h3><span class="text-[10px] uppercase tracking-wide bg-slate-800 text-emerald-300 rounded px-1.5 py-0.5">${w.type}</span>
+    <span class="ml-auto flex gap-1"><button title="Move up" onclick="event.stopPropagation();moveWidget('${w.id}',-1)" class="px-2 border rounded">↑</button><button title="Move down" onclick="event.stopPropagation();moveWidget('${w.id}',1)" class="px-2 border rounded">↓</button><button title="Delete" onclick="event.stopPropagation();deleteWidget('${w.id}')" class="px-2 border rounded text-rose-600">🗑</button></span></div>${inner}</section>`;
+}
+function renderWidget(w){
+  if(w.type==='auction') return blockShell(w, `<div class="grid sm:grid-cols-2 gap-3">${w.items.map(it=>`
+    <div class="bg-slate-950 text-white border border-slate-700 rounded-lg p-3"><div class="font-medium">${esc(it.title)}</div><div class="text-xs text-slate-300">${esc(it.subtitle||'')}</div>
+    <div class="mt-2 flex items-baseline gap-2"><span class="text-xl font-bold">${money(it.currentBid)}</span><span class="text-xs text-slate-300">${it.bids} bids</span></div>
+    <div class="text-sm">⏱ <span data-countdown="${it.id}">${fmtLeft(it.endsAt-Date.now())}</span></div>
+    <div class="mt-2 flex gap-2"><button class="px-3 py-1.5 rounded bg-rose-600 text-white text-sm" onclick="event.stopPropagation();placeBid('${w.id}','${it.id}')">Place Instant Bid (+${money(it.increment)})</button>
+    <button class="px-3 py-1.5 rounded border text-sm" onclick="event.stopPropagation();buyNow('${w.id}','${it.id}')">Buy It Now ${money(it.buyNow)}</button></div></div>`).join('')}</div>`);
+  if(w.type==='podcast') return blockShell(w, `<div class="text-sm text-slate-300 mb-2">🎙 ${esc(w.show||'Podcast')}</div><div class="space-y-2">${w.items.map(it=>`
+    <div class="bg-slate-950 text-white border border-slate-700 rounded-lg p-3 flex items-center gap-3"><button class="w-9 h-9 rounded-full bg-violet-600 text-white shrink-0" onclick="event.stopPropagation();playEpisode('${w.id}','${it.id}')">▶</button>
+    <div class="min-w-0"><div class="font-medium truncate">${esc(it.title)}</div><div class="text-xs text-slate-300">${Math.floor(it.duration/60)} min • ${esc(it.notes||'')}</div>
+    ${it.featured?`<div class="text-xs mt-0.5">⭐ Featured: ${esc(it.featured.title)} — ${money(it.featured.price)}</div>`:''}</div></div>`).join('')}</div>`);
+  if(w.type==='service') return blockShell(w, `<div class="grid sm:grid-cols-2 gap-3">${w.items.map(it=>`
+    <div class="bg-slate-950 text-white border border-slate-700 rounded-lg p-3"><div class="font-medium">${esc(it.title)}</div><div class="text-sm">${money(it.rate)} <span class="text-slate-300">${it.rateType==='hourly'?'/ hr':'flat'}</span> • deposit ${money(it.deposit)}</div>
+    <div class="mt-2 flex flex-wrap gap-1.5">${it.slots.map(s=>`<button class="px-2 py-1 rounded bg-slate-950 text-sky-300 border border-sky-500/40 font-bold text-xs" onclick="event.stopPropagation();bookSlot('${w.id}','${it.id}','${esc(s)}')">${esc(s)}</button>`).join('')}</div></div>`).join('')}</div>`);
+  if(w.type==='retail') return blockShell(w, `<div class="grid sm:grid-cols-2 gap-3">${w.items.map(it=>`
+    <div class="bg-slate-950 text-white border border-slate-700 rounded-lg p-3 flex gap-3">${it.photo?`<img src="${esc(it.photo)}" class="w-16 h-16 object-cover rounded" alt="">`:''}<div><div class="font-medium">${esc(it.title)}</div>
+    <div class="text-xs text-slate-300">${esc(it.sku||'')}</div><div class="font-bold mt-0.5">${money(it.price)}</div>
+    <button class="mt-1 px-3 py-1 rounded bg-emerald-600 text-white text-xs" onclick="event.stopPropagation();addCart({kind:'retail',title:'${esc(it.title)}',amount:${Number(it.price)||0},hold:false})">Add to Cart</button></div></div>`).join('')}</div>`);
+  if(w.type==='bento') return blockShell(w, `<div class="grid sm:grid-cols-2 gap-3">${w.items.map(it=>`
+    <div class="bg-slate-950 text-white border border-slate-700 rounded-lg p-3"><div class="flex gap-1.5 flex-wrap">${(it.badges||[]).map(b=>`<span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded px-1.5 py-0.5">${esc(b)}</span>`).join('')}<span class="text-[10px] bg-slate-900 text-white rounded px-1.5 py-0.5">${esc(it.kind)}</span></div>
+    <div class="font-medium mt-1.5">${esc(it.title)}</div><div class="font-bold">${money(it.price)} <span class="text-xs text-slate-300">${esc(it.priceNote||'')}</span></div>
+    <div class="flex flex-wrap gap-1 mt-1.5">${(it.specs||[]).map(sp=>`<span class="text-[11px] border rounded-full px-2 py-0.5">${esc(sp[0])} : ${esc(sp[1])}</span>`).join('')}</div>
+    <button class="mt-2 px-3 py-1 rounded bg-amber-500 text-white text-xs" onclick="event.stopPropagation();addCart({kind:'bento',title:'${esc(it.title)}',amount:${Number(it.price)||0},hold:${it.kind==='Crowdfunding'}})">${it.kind==='Crowdfunding'?'Pledge':'Reserve'}</button></div>`).join('')}</div>`);
+  if(w.type==='faq') return blockShell(w, `<div class="flex flex-wrap gap-1.5 mb-2">${['All',...new Set(w.items.map(i=>i.cat))].map(c=>`<button class="px-2.5 py-1 rounded-full border text-xs" onclick="event.stopPropagation();filterFaq('${w.id}','${esc(c)}',this)">${esc(c)}</button>`).join('')}
+    <input placeholder="Search questions…" class="bg-slate-950 text-white border border-slate-700 rounded px-2 py-1 text-xs flex-1 min-w-[140px]" oninput="searchFaq('${w.id}',this.value)" onclick="event.stopPropagation()"></div>
+    <div class="space-y-1.5" data-faq-list>${w.items.map(it=>`<div class="faq-item border rounded-lg" data-cat="${esc(it.cat)}" data-text="${esc((it.q+' '+it.a).toLowerCase())}">
+    <button class="w-full text-left px-3 py-2 font-medium" onclick="event.stopPropagation();this.parentElement.classList.toggle('open')">${esc(it.q)}</button>
+    <div class="faq-a px-3 pb-3 text-slate-200">${esc(it.a)}</div></div>`).join('')}</div>`);
+  if(w.type==='video') return blockShell(w, `<div class="relative bg-slate-900 rounded-lg h-40 overflow-hidden mb-3">
+      <div class="synth-cursor absolute w-5 h-5 bg-white/90 rounded-full shadow" style="left:8%;top:30%"></div>
+      <div class="absolute bottom-2 left-3 right-3 text-white text-sm"><span class="bg-indigo-600 rounded px-1.5 py-0.5 text-xs">SCREEN-SYNTH DEMO</span> <span id="synthCaption">Building widgets live — captions sync to each chapter.</span></div></div>
+    <div class="space-y-1.5">${w.items.map(it=>`<button class="w-full text-left border rounded-lg px-3 py-2 hover:bg-slate-950 border border-indigo-500/40 text-white" onclick="event.stopPropagation();jumpChapter('${it.target}','${esc(it.title)}')"><span class="font-mono text-xs text-indigo-600">${esc(it.t)}</span> <span class="font-medium">${esc(it.title)}</span><span class="block text-xs text-slate-300">${esc(it.desc)}</span></button>`).join('')}</div>`);
+  return blockShell(w, '<div class="text-slate-300">Widget</div>');
+}
+function selectWidget(id){ selectedId = id; renderCanvas(); renderInspector(); }
+function moveWidget(id, d){ const i = siteState.widgets.findIndex(w=>w.id===id); const j = i+d; if(j<0||j>=siteState.widgets.length) return; [siteState.widgets[i],siteState.widgets[j]]=[siteState.widgets[j],siteState.widgets[i]]; save(); renderCanvas(); }
+function deleteWidget(id){ siteState.widgets = siteState.widgets.filter(w=>w.id!==id); if(selectedId===id) selectedId=null; save(); renderAll(); }
+function addWidget(type){
+  const titles = {auction:'Live Auction Floor', podcast:'Podcast Hub', service:'Book a Service', retail:'Retail Grid', bento:'Universal Bento', faq:'FAQ & Knowledge Hub', video:'Video Masterclass'};
+  const w = { id:nid('w'), type, title:titles[type], items:[] };
+  if(type==='podcast') w.show = 'New Show';
+  siteState.widgets.push(w); selectedId = w.id; save(); renderAll();
+}
+
+/* ---------- Interactions ---------- */
+function placeBid(wid, iid){
+  const w = findWidget(wid), it = w.items.find(x=>x.id===iid); if(!it) return;
+  it.currentBid += it.increment; it.bids += 1;
+  let note = '';
+  if(it.endsAt - Date.now() < 60000){ it.endsAt += 120000; note = ' Popcorn bidding: +2:00 anti-snipe extension applied.'; }
+  addCart({kind:'auction', title: it.title + ' — winning bid', amount: it.currentBid, hold:true});
+  save(); renderCanvas(); renderInspector();
+  alert('Bid placed: ' + money(it.currentBid) + ' (' + it.bids + ' bids). Held in escrow in the Omni-Cart.' + note);
+}
+function buyNow(wid, iid){ const w = findWidget(wid), it = w.items.find(x=>x.id===iid); addCart({kind:'auction-bin', title: it.title + ' — Buy It Now', amount: it.buyNow, hold:false}); }
+function bookSlot(wid, iid, slot){ const w = findWidget(wid), it = w.items.find(x=>x.id===iid); addCart({kind:'service', title: it.title + ' — ' + slot + ' (deposit)', amount: it.deposit, hold:false}); alert('Booked: ' + it.title + ' at ' + slot + '. Deposit added to Omni-Cart.'); }
+function addCart(entry){ cart.push({id:nid('c'), ...entry}); saveCart(); }
+function removeCart(id){ cart = cart.filter(c=>c.id!==id); saveCart(); renderCart(); }
+function renderWallet(){ $('#walletCount').textContent = cart.length; renderCart(); }
+function renderCart(){
+  const box = $('#cartItems'); if(!box) return;
+  box.innerHTML = cart.length ? cart.map(c=>`<div class="flex items-center gap-2 border rounded-lg px-3 py-2"><span>${c.hold?'🔒':'🧾'}</span><span class="flex-1">${esc(c.title)}</span><span class="font-medium">${money(c.amount)}</span><button class="text-rose-500" onclick="removeCart('${c.id}')">×</button></div>`).join('') : '<div class="text-slate-300">Cart is empty. Buy, bid, book, or pledge — it all lands here.</div>';
+  $('#cartTotal').textContent = money(cart.filter(c=>!c.hold).reduce((s,c)=>s+Number(c.amount||0),0));
+  $('#cartEscrow').textContent = money(cart.filter(c=>c.hold).reduce((s,c)=>s+Number(c.amount||0),0));
+}
+function toggleCart(){ $('#cartDrawer').classList.toggle('translate-x-full'); renderCart(); }
+
+/* Podcast deck (simulated playback) */
+let deck = { playing:false, ep:null, wid:null, t:0, timer:null };
+function playEpisode(wid, iid){
+  const w = findWidget(wid), it = w.items.find(x=>x.id===iid); if(!it) return;
+  deck = { playing:true, ep:it, wid, t:0, timer:null };
+  $('#audioDeck').classList.remove('hidden');
+  $('#deckTitle').textContent = (w.show? w.show + ' — ' : '') + it.title;
+  const buy = $('#deckBuy');
+  if(it.featured){ buy.classList.remove('hidden'); buy.textContent = 'Buy Featured Lot — ' + money(it.featured.price); } else buy.classList.add('hidden');
+  clearInterval(deck.timer);
+  deck.timer = setInterval(()=>{ if(!deck.playing) return; deck.t += 1; if(deck.t >= it.duration){ closeDeck(); return; }
+    $('#deckBar').style.width = (100*deck.t/it.duration) + '%';
+    $('#deckTime').textContent = Math.floor(deck.t/60) + ':' + String(deck.t%60).padStart(2,'0') + ' / ' + Math.floor(it.duration/60) + ':' + String(it.duration%60).padStart(2,'0'); }, 1000);
+}
+function toggleDeck(){ deck.playing = !deck.playing; $('#deckPlayBtn').textContent = deck.playing ? '⏸' : '▶'; }
+function closeDeck(){ clearInterval(deck.timer); deck.playing=false; $('#audioDeck').classList.add('hidden'); }
+function deckBuyFeatured(){ if(deck.ep && deck.ep.featured) addCart({kind:'retail', title: deck.ep.featured.title + ' (featured in episode)', amount: deck.ep.featured.price, hold:false}); }
+
+/* FAQ */
+function filterFaq(wid, cat, btn){
+  const sec = document.querySelector(`[data-wid="${wid}"]`);
+  sec.querySelectorAll('.faq-item').forEach(el=>{ el.style.display = (cat==='All'||el.dataset.cat===cat)?'':'none'; });
+}
+function searchFaq(wid, q){
+  const sec = document.querySelector(`[data-wid="${wid}"]`);
+  q = q.toLowerCase();
+  sec.querySelectorAll('.faq-item').forEach(el=>{ el.style.display = el.dataset.text.includes(q)?'':'none'; });
+}
+function jumpChapter(type, title){
+  const w = siteState.widgets.find(x=>x.type===type); if(!w) return;
+  selectedId = w.id; renderCanvas(); renderInspector();
+  const el = document.querySelector(`[data-wid="${w.id}"]`);
+  el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.remove('pulse-ring'); void el.offsetWidth; el.classList.add('pulse-ring');
+  $('#synthCaption').textContent = 'Chapter: ' + title + ' — highlighted on the canvas.';
+}
+
+/* Countdown heartbeat */
+setInterval(()=>{
+  let dirty = false;
+  siteState.widgets.filter(w=>w.type==='auction').forEach(w=>w.items.forEach(it=>{
+    const el = document.querySelector(`[data-countdown="${it.id}"]`);
+    if(el){ el.textContent = fmtLeft(it.endsAt - Date.now()); }
+  }));
+}, 1000);
+
+/* ---------- Inspector ---------- */
+function field(label, val, oninput, type='text'){ return `<label class="block text-xs text-slate-300 mt-2">${label}</label><input type="${type}" class="bg-slate-950 text-white border border-slate-700 rounded w-full px-2 py-1.5" value="${esc(val)}" oninput="${oninput}">`; }
+function renderInspector(){
+  const box = $('#inspector'); const w = findWidget(selectedId);
+  if(!w){ box.innerHTML = 'Select a widget on the canvas.'; return; }
+  let h = field('Widget title', w.title, `updW('${w.id}','title',this.value)`);
+  if(w.type==='podcast') h += field('Show name', w.show||'', `updW('${w.id}','show',this.value)`);
+  h += '<div class="mt-3 space-y-2 max-h-56 overflow-auto">' + w.items.map((it,i)=>{
+    const label = it.title || it.q || ('Item '+(i+1));
+    return `<div class="bg-slate-950 text-white border border-slate-700 rounded px-2 py-1.5 flex items-center gap-2"><span class="flex-1 truncate">${esc(label)}</span><button class="text-rose-500" onclick="delItem('${w.id}','${it.id}')">🗑</button></div>`;
+  }).join('') + '</div>';
+  h += '<div class="mt-3 border-t pt-3"><div class="font-semibold text-xs uppercase tracking-wide text-slate-300">Add item</div>' + addForm(w) + '</div>';
+  box.innerHTML = h;
+}
+function updW(id, key, val){ const w = findWidget(id); w[key] = val; save(); renderCanvas(); }
+function delItem(wid, iid){ const w = findWidget(wid); w.items = w.items.filter(x=>x.id!==iid); save(); renderAll(); }
+function gv(id){ const el = document.getElementById(id); return el ? el.value : ''; }
+function addForm(w){
+  const T = 'border rounded w-full px-2 py-1.5 mt-1.5';
+  if(w.type==='auction') return `<input id="af_t" class="${T}" placeholder="Lot title"><input id="af_sub" class="${T}" placeholder="Subtitle / provenance"><div class="flex gap-2"><input id="af_bid" type="number" class="${T}" placeholder="Start bid $"><input id="af_bin" type="number" class="${T}" placeholder="Buy It Now $"></div><input id="af_min" type="number" class="${T}" placeholder="Minutes until close"><button class="mt-2 w-full py-1.5 rounded bg-rose-600 text-white" onclick="addAuction('${w.id}')">Add Lot</button>`;
+  if(w.type==='podcast') return `<input id="af_t" class="${T}" placeholder="Episode title"><input id="af_min" type="number" class="${T}" placeholder="Duration (minutes)"><input id="af_n" class="${T}" placeholder="Show notes"><button class="mt-2 w-full py-1.5 rounded bg-violet-600 text-white" onclick="addEpisode('${w.id}')">Add Episode</button>`;
+  if(w.type==='service') return `<input id="af_t" class="${T}" placeholder="Service name"><div class="flex gap-2"><input id="af_rate" type="number" class="${T}" placeholder="Rate $"><input id="af_dep" type="number" class="${T}" placeholder="Deposit $"></div><select id="af_rt" class="${T}"><option value="flat">Flat rate</option><option value="hourly">Hourly</option></select><input id="af_slots" class="${T}" placeholder="Slots, comma separated"><button class="mt-2 w-full py-1.5 rounded bg-sky-600 text-white" onclick="addService('${w.id}')">Add Service</button>`;
+  if(w.type==='retail') return `<input id="af_t" class="${T}" placeholder="Product title"><input id="af_sku" class="${T}" placeholder="SKU"><input id="af_p" type="number" class="${T}" placeholder="Price $"><button class="mt-2 w-full py-1.5 rounded bg-emerald-600 text-white" onclick="addRetail('${w.id}')">Add Product</button>`;
+  if(w.type==='bento') return `<input id="af_t" class="${T}" placeholder="Card title"><select id="af_k" class="${T}"><option>Rental</option><option>Real Estate</option><option>Crowdfunding</option><option>Ticket</option><option>Custom</option></select><input id="af_p" type="number" class="${T}" placeholder="Price $"><input id="af_specs" class="${T}" placeholder="Specs: Label : Value | Label : Value"><button class="mt-2 w-full py-1.5 rounded bg-amber-500 text-white" onclick="addBento('${w.id}')">Add Card</button>`;
+  if(w.type==='faq') return `<input id="af_c" class="${T}" placeholder="Category"><input id="af_t" class="${T}" placeholder="Question"><input id="af_n" class="${T}" placeholder="Answer"><button class="mt-2 w-full py-1.5 rounded bg-teal-600 text-white" onclick="addFaq('${w.id}')">Add FAQ</button>`;
+  if(w.type==='video') return `<input id="af_tm" class="${T}" placeholder="Timecode (e.g. 18:30)"><input id="af_t" class="${T}" placeholder="Chapter title"><input id="af_n" class="${T}" placeholder="Description"><button class="mt-2 w-full py-1.5 rounded bg-indigo-600 text-white" onclick="addChapter('${w.id}')">Add Chapter</button>`;
+  return '';
+}
+function addAuction(wid){ const w=findWidget(wid); w.items.push({id:nid('lot'), title:gv('af_t')||'Untitled Lot', subtitle:gv('af_sub'), currentBid:Number(gv('af_bid'))||0, buyNow:Number(gv('af_bin'))||0, bids:0, increment:10, endsAt:Date.now()+(Number(gv('af_min'))||60)*60000}); save(); renderAll(); }
+function addEpisode(wid){ const w=findWidget(wid); w.items.push({id:nid('ep'), title:gv('af_t')||'Untitled Episode', duration:(Number(gv('af_min'))||10)*60, notes:gv('af_n'), featured:null}); save(); renderAll(); }
+function addService(wid){ const w=findWidget(wid); w.items.push({id:nid('svc'), title:gv('af_t')||'Service', rate:Number(gv('af_rate'))||0, rateType:gv('af_rt'), deposit:Number(gv('af_dep'))||0, slots:gv('af_slots').split(',').map(s=>s.trim()).filter(Boolean)}); save(); renderAll(); }
+function addRetail(wid){ const w=findWidget(wid); w.items.push({id:nid('sku'), title:gv('af_t')||'Product', sku:gv('af_sku'), price:Number(gv('af_p'))||0}); save(); renderAll(); }
+function addBento(wid){ const w=findWidget(wid); const specs = gv('af_specs').split('|').map(s=>s.split(':').map(x=>x.trim())).filter(p=>p.length===2); w.items.push({id:nid('b'), title:gv('af_t')||'Card', kind:gv('af_k'), price:Number(gv('af_p'))||0, priceNote:'', badges:['New'], specs}); save(); renderAll(); }
+function addFaq(wid){ const w=findWidget(wid); w.items.push({id:nid('q'), cat:gv('af_c')||'General', q:gv('af_t')||'Question', a:gv('af_n')||''}); save(); renderAll(); }
+function addChapter(wid){ const w=findWidget(wid); w.items.push({id:nid('ch'), t:gv('af_tm')||'00:00', title:gv('af_t')||'Chapter', desc:gv('af_n'), target:'retail'}); save(); renderAll(); }
+
+/* ---------- Universal schema: JSON-LD + RSS ---------- */
+function generateUniversalGraph(){
+  const graph = [];
+  siteState.widgets.forEach(w=>{
+    if(w.type==='retail') w.items.forEach(it=>graph.push({'@type':'Product', name:it.title, sku:it.sku||it.id, offers:{'@type':'Offer', price:it.price, priceCurrency:'USD', availability:'https://schema.org/InStock'}}));
+    if(w.type==='auction') w.items.forEach(it=>graph.push({'@type':'Event', name:it.title, description:it.subtitle||'', offers:{'@type':'Offer', price:it.currentBid, priceCurrency:'USD'}, endDate:new Date(it.endsAt).toISOString()}));
+    if(w.type==='service') w.items.forEach(it=>graph.push({'@type':'Service', name:it.title, offers:{'@type':'Offer', price:it.rate, priceCurrency:'USD'}}));
+    if(w.type==='podcast') graph.push({'@type':'PodcastSeries', name:w.show||w.title, webFeed:'rss.xml', episode:w.items.map(it=>({'@type':'PodcastEpisode', name:it.title, duration:'PT'+Math.round(it.duration/60)+'M'}))});
+    if(w.type==='bento') w.items.forEach(it=>graph.push({'@type':'Product', name:it.title, description:(it.specs||[]).map(s=>s[0]+': '+s[1]).join(', '), offers:{'@type':'Offer', price:it.price, priceCurrency:'USD'}}));
+  });
+  return JSON.stringify({'@context':'https://schema.org', '@graph':graph}, null, 2);
+}
+function generateRSS(){
+  const eps = [];
+  siteState.widgets.filter(w=>w.type==='podcast').forEach(w=>w.items.forEach(it=>eps.push({show:w.show||w.title, ...it})));
+  const items = eps.map(it=>`    <item><title>${esc(it.title)}</title><description>${esc(it.notes||'')}</description><itunes:duration>${Math.floor(it.duration/60)}:${String(it.duration%60).padStart(2,'0')}</itunes:duration></item>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"><channel><title>${esc(siteState.theme.siteName)} — Podcasts</title><link>https://hub.mateflowlabs.com/</link><description>All podcast hubs published from the Universal Widget Studio.</description>\n${items}\n</channel></rss>`;
+}
+function showSchema(){ $('#schemaOut').textContent = generateUniversalGraph(); const m=$('#schemaModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+function hideSchema(){ const m=$('#schemaModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
+function downloadRSS(){ const blob = new Blob([generateRSS()], {type:'application/rss+xml'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rss.xml'; a.click(); }
+
+/* ---------- Export / Import / Publish (Gemini's studio contract) ---------- */
+function exportStateJSON() {
+  const blob = new Blob([JSON.stringify(siteState, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "dynamic-widget-schema.json";
+  a.click();
+}
+function importStateJSON(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{ try{ siteState = JSON.parse(r.result); selectedId=null; save(); renderAll(); }catch(e){ alert('That file is not a valid dynamic-widget schema.'); } };
+  r.readAsText(f);
+}
+function publishStandaloneHTML() {
+  const markup = document.getElementById("siteViewport").innerHTML;
+  const schema = generateUniversalGraph();
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${siteState.theme.siteName}</title><script src="https://cdn.tailwindcss.com"><\/script><script type="application/ld+json">${schema}<\/script></head><body class="bg-slate-950 text-white text-white"><div class="max-w-5xl mx-auto p-4 space-y-4"></div><\/body><\/html>`;
+  const blob = new Blob([html], { type: "text/html" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "published-omni-site.html";
+  a.click();
+}
+
+/* ---------- Push to Hub: Ebay Pipeline feed ---------- */
+async function loadFeed(){
+  try{
+    const r = await fetch('feed.json', {cache:'no-store'});
+    if(!r.ok) throw new Error('no feed');
+    const data = await r.json();
+    feedItems = data.items || [];
+    $('#feedStatus').textContent = feedItems.length + ' live listings • synced ' + (data.generatedAt||'');
+    $('#feedTray').innerHTML = feedItems.map((f,i)=>`<div class="bg-slate-950 text-white border border-slate-700 rounded-lg p-2 flex gap-2">${f.photo?`<img src="${esc(f.photo)}" class="w-11 h-11 object-cover rounded" alt="">`:''}
+      <div class="min-w-0 flex-1"><div class="text-xs font-medium truncate" title="${esc(f.title)}">${esc(f.title)}</div>
+      <div class="text-[11px] text-slate-300">${money(f.price)} • INV ${esc(f.inventoryNumber||'—')} • eBay ${esc(f.ebayItemId)}</div>
+      <div class="flex gap-1 mt-1"><button class="px-1.5 py-0.5 rounded bg-emerald-600 text-white text-[11px]" onclick="pushFeed(${i},'retail')">Retail</button>
+      <button class="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[11px]" onclick="pushFeed(${i},'auction')">Auction</button>
+      <button class="px-1.5 py-0.5 rounded bg-violet-600 text-white text-[11px]" onclick="pushFeed(${i},'podcast')">Podcast ⭐</button></div></div></div>`).join('');
+  }catch(e){ $('#feedStatus').textContent = 'Feed offline — the Ebay Pipeline sync writes feed.json here.'; }
+}
+function targetWidget(type){
+  let w = siteState.widgets.find(x=>x.type===type);
+  if(!w){ addWidget(type); w = siteState.widgets[siteState.widgets.length-1]; }
+  return w;
+}
+function pushFeed(i, mode){
+  const f = feedItems[i]; if(!f) return;
+  if(mode==='retail'){ const w = targetWidget('retail'); w.items.push({id:nid('sku'), title:f.title, sku:'INV-'+(f.inventoryNumber||f.ebayItemId), price:f.price, photo:f.photo||''}); }
+  if(mode==='auction'){ const w = targetWidget('auction'); w.items.push({id:'ebay-lot-'+f.ebayItemId, title:f.title, subtitle:'Imported via Alkaline eBay Pipeline • LIVE EBAY SYNC (#'+f.ebayItemId+')', currentBid:f.price, buyNow:Math.round(f.price*1.27), bids:0, increment:10, endsAt:Date.now()+24*3600*1000}); }
+  if(mode==='podcast'){ const w = targetWidget('podcast'); if(!w.items.length) w.items.push({id:nid('ep'), title:'New Episode', duration:600, notes:'', featured:null}); w.items[0].featured = {title:f.title, price:f.price}; }
+  save(); renderAll();
+}
+
+/* ---------- AI Co-Pilot: Ask & Learn ---------- */
+const COPILOT_KB = [
+  { keys:['auction','podcast','link','episode'], q:'How do I link a Podcast Episode to a Live Auction Lot?', a:'Push the lot from the Ebay Pipeline feed tray with the Podcast ⭐ button — it becomes the featured lot on the first episode, and the sticky player grows a Buy Featured Lot button.', inject:null },
+  { keys:['locksmith','emergency','service'], q:'Create an emergency 24/7 locksmith service widget', a:'One click and it is on your canvas with deposit + bookable slots.', inject:{type:'service', title:'Emergency Services', items:[{title:'Emergency Locksmith — 24/7', rate:95, rateType:'flat', deposit:25, slots:['ASAP — next available','Today 6:00 PM']}]} },
+  { keys:['auction','escrow','anti-snipe','snipe','popcorn'], q:'How does anti-snipe auction escrow work?', a:'Bids are conditional holds in the Omni-Cart (escrow), not charges. A bid inside the final minute triggers Popcorn Bidding: the clock extends +2:00 automatically.', inject:null },
+  { keys:['publish','export','deploy'], q:'How do I publish my site?', a:'Publish Storefront (top bar) exports a standalone HTML file with the full JSON-LD @graph embedded. Save Schema exports the portable dynamic-widget-schema.json.', inject:null },
+  { keys:['rental','rent','bento','custom'], q:'Build a rental card', a:'Dropping a Universal Bento rental card onto your canvas now.', inject:{type:'bento', title:'Rentals', items:[{title:'Equipment Rental — Daily', kind:'Rental', price:75, priceNote:'/day', badges:['Available'], specs:[['Deposit','$200'],['Delivery','Local']]}]} }
+];
+function toggleCopilot(){ $('#copilot').classList.toggle('hidden'); if(!$('#copilotBody').dataset.ready){ renderCopilotHome(); $('#copilotBody').dataset.ready = 1; } }
+function renderCopilotHome(){
+  $('#copilotBody').innerHTML = '<div class="text-slate-300 text-xs">Pick a mission, or type your own below. “Show me” answers can also build the widget for you.</div>' +
+    COPILOT_KB.map((k,i)=>`<button class="w-full text-left border rounded-lg px-3 py-2 hover:bg-slate-950 border border-indigo-500/40 text-white" onclick="copilotAnswer(${i})">${esc(k.q)}</button>`).join('');
+}
+function copilotAnswer(i){
+  const k = COPILOT_KB[i];
+  $('#copilotBody').innerHTML += `<div class="bg-slate-950 border border-indigo-500/40 text-white rounded-lg px-3 py-2"><div class="font-medium">${esc(k.q)}</div><div class="text-slate-200 mt-0.5">${esc(k.a)}</div>${k.inject?`<button class="mt-2 px-3 py-1.5 rounded bg-indigo-600 text-white text-xs" onclick="copilotInject(${i})">⚡ Auto-Inject This Widget into Canvas</button>`:''}</div>`;
+  $('#copilotBody').scrollTop = 1e6;
+}
+function copilotInject(i){
+  const t = COPILOT_KB[i].inject; if(!t) return;
+  const w = { id:nid('w'), type:t.type, title:t.title, items:t.items.map(it=>({id:nid('it'), ...it})) };
+  siteState.widgets.push(w); selectedId = w.id; save(); renderAll();
+  $('#copilotBody').innerHTML += '<div class="text-emerald-600 text-xs">Injected ✓ — it is live on your canvas.</div>';
+}
+function copilotAsk(){
+  const text = $('#copilotInput').value.trim().toLowerCase(); if(!text) return;
+  $('#copilotInput').value = '';
+  const i = COPILOT_KB.findIndex(k=>k.keys.some(key=>text.includes(key)));
+  if(i >= 0) copilotAnswer(i);
+  else $('#copilotBody').innerHTML += `<div class="bg-slate-950 text-white rounded-lg px-3 py-2"><div class="font-medium">${esc(text)}</div><div class="text-slate-200 mt-0.5">That one is beyond my built-in missions. The pattern that covers almost everything: drop the widget type from the left rail, click it on the canvas, and its Inspector morphs to match. Auctions, services, podcasts, rentals — all one schema.</div></div>`;
+  $('#copilotBody').scrollTop = 1e6;
+}
+
+/* ---------- Init ---------- */
+if(!load()) seed();
+renderAll();
+loadFeed();
+</script>
+<script src="/universal_verbal_ai.js"></script>
+
+<!-- VDD_LIVE_LOCK_SWITCH_START -->
+<div id="vdd-live-lock-bar" style="position:fixed;bottom:14px;right:14px;z-index:999999;background:#0f172a;color:#f8fafc;border:2px solid #22c55e;border-radius:10px;padding:10px 14px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,0.45);display:flex;align-items:center;gap:12px;">
+  <span style="font-weight:700;color:#4ade80;letter-spacing:0.4px;">● CATALOG LOCK:</span>
+  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;">
+    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-live" value="live" checked style="accent-color:#22c55e;cursor:pointer;">
+    <span>LIVE eBay (<span id="vdd-live-count-badge">1161</span> Locked)</span>
+  </label>
+  <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;color:#94a3b8;">
+    <input type="radio" name="vdd_catalog_mode" id="vdd-radio-auto" value="auto_lock" style="accent-color:#38bdf8;cursor:pointer;">
+    <span>Auto-Lock Sync</span>
+  </label>
+  <button id="vdd-force-reload-btn" style="background:#22c55e;color:#052e16;border:none;border-radius:6px;padding:4px 8px;font-weight:700;cursor:pointer;">Verify Live</button>
+</div>
+<script>
+(function(){
+  if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+  }
+  function enforceLiveCatalog(mode) {
+    localStorage.setItem('VDD_CATALOG_LOCK_MODE', mode || 'live');
+    var raw = window.VDD_LIVE_PRODUCTS || window.VDD_CATALOG || [];
+    var items = raw.filter(function(it){
+      var id = String((it && (it.id || it.itemId || it.sku)) || '');
+      return id.indexOf('STAGED-') !== 0;
+    });
+    window.VDD_CATALOG = items;
+    window.VDD_LIVE_PRODUCTS = items;
+    var badge = document.getElementById('vdd-live-count-badge');
+    if (badge && items.length) badge.textContent = String(items.length);
+    if (typeof window.renderProducts === 'function') window.renderProducts(items);
+    if (typeof window.renderCatalog === 'function') window.renderCatalog(items);
+    if (typeof window.loadCatalog === 'function') window.loadCatalog(items);
+    window.dispatchEvent(new CustomEvent('vdd:catalog-locked', { detail: { count: items.length, mode: mode } }));
+  }
+  document.addEventListener('change', function(e){
+    if (e.target && e.target.name === 'vdd_catalog_mode') {
+      enforceLiveCatalog(e.target.value);
+      var bar = document.getElementById('vdd-live-lock-bar');
+      if (bar) bar.style.borderColor = e.target.value === 'live' ? '#22c55e' : '#38bdf8';
+    }
+  });
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.id === 'vdd-force-reload-btn') {
+      var s = document.createElement('script');
+      s.src = '/vdd_live_products.js?t=' + Date.now();
+      s.onload = function(){
+        enforceLiveCatalog('live');
+        e.target.textContent = 'Locked (' + (window.VDD_CATALOG ? window.VDD_CATALOG.length : 0) + ') ✓';
+      };
+      document.head.appendChild(s);
+    }
+  });
+  window.addEventListener('DOMContentLoaded', function(){
+    var saved = localStorage.getItem('VDD_CATALOG_LOCK_MODE') || 'live';
+    var r = document.getElementById(saved === 'auto_lock' ? 'vdd-radio-auto' : 'vdd-radio-live');
+    if (r) r.checked = true;
+    enforceLiveCatalog(saved);
+    setTimeout(function(){ enforceLiveCatalog(saved); }, 700);
+  });
+})();
+</script>
+<!-- VDD_LIVE_LOCK_SWITCH_END -->
+</body>
+</html>
